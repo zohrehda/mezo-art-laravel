@@ -4,6 +4,7 @@ namespace App\Traits;
 
 trait ApiResponseBuilderTrait
 {
+    
     public function response($message, $data = [], $status_code = 200, $meta = [])
     {
         return response()->json([
