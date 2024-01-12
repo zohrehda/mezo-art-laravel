@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DesignCotroller ;
+use App\Http\Controllers\DesignCotroller;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,5 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('/designs',DesignCotroller::class) ;
+Route::prefix('auth')->group(function () {
+
+    Route::post('/authenticate', [AuthController::class, 'authenticate']);
+    Route::post('/verifyPassword', [AuthController::class, 'verifyPassword']);
+    Route::post('/verifyOtp', [AuthController::class, 'verifyOtp']);
+    Route::post('/sendOtp', [AuthController::class, 'sendOtp']);
+    Route::get('/logout', [AuthController::class, 'logout']);
+});
+
+Route::apiResource('/designs', DesignCotroller::class);
 
