@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Traits\ApiResponseBuilderTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -15,10 +16,13 @@ class AuthController extends Controller
 
     private $login_type = '';
     private $user = '';
+    private $username = '';
 
     public function __construct(Request $request)
     {
         $username = $request->username;
+
+        $this->username = $username;
 
         if (is_numeric($username))
             $type = 'mobile';
@@ -109,7 +113,6 @@ class AuthController extends Controller
         if ($this->user && Hash::check($request->password, $this->user->password))
             return $this->response(trans('auth.successed'), $this->login(), 200);
 
-
         return $this->response(trans('auth.failed'), [], 400);
     }
 
@@ -117,8 +120,9 @@ class AuthController extends Controller
     public function login()
     {
         $field = $this->login_type;
+        // dd($field);
         $user = User::firstOrCreate([
-            "$field" => $this->user[$field],
+            "$field" => $this->username,
         ]);
 
         $token = $user->createToken('otp');
