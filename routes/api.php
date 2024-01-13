@@ -23,10 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('auth')->group(function () {
 
-    Route::post('/authenticate', [AuthController::class, 'authenticate']);
-    Route::post('/verifyPassword', [AuthController::class, 'verifyPassword']);
-    Route::post('/verifyOtp', [AuthController::class, 'verifyOtp']);
-    Route::post('/sendOtp', [AuthController::class, 'sendOtp']);
+    Route::post('/authenticate', [AuthController::class, 'authenticate'])->withoutMiddleware('auth:sanctum');
+    Route::post('/verifyPassword', [AuthController::class, 'verifyPassword'])->withoutMiddleware('auth:sanctum');
+    Route::post('/verifyOtp', [AuthController::class, 'verifyOtp'])->withoutMiddleware('auth:sanctum');
+    Route::post('/sendOtp', [AuthController::class, 'sendOtp'])->withoutMiddleware('auth:sanctum');
     Route::get('/logout', [AuthController::class, 'logout']);
 });
 
