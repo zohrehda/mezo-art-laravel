@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enums\DesignPrintType;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Enums\DesignType ;
+use App\Enums\DesignType;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Design>
  */
@@ -17,9 +19,10 @@ class DesignFactory extends Factory
     public function definition(): array
     {
         return [
-            'code'=>'234343' ,
-            'print_type'=>'sub' ,
-            'design_type'=> $this->faker->randomElement(['sub','dtf'])
+            'code' => $this->faker->numberBetween(10000, 99999),
+            'print_type' => $this->faker->randomElement(array_column(DesignPrintType::cases(), 'value')),
+            'design_type' => $this->faker->randomElement(array_column(DesignType::cases(), 'value')) ,
+            'designer_id'=>1
         ];
     }
 }

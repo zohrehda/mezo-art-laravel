@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\PersonalAccessToken;
 use App\Traits\ApiResponseBuilderTrait;
 use Illuminate\Database\Eloquent\Builder;
- use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -14,6 +14,7 @@ use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
+    use ApiResponseBuilderTrait;
     /**
      * Register any application services.
      */
@@ -37,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
             }
             return $validator;
         });
-          $self = $this;
+        $self = $this;
         Builder::macro('paginate22', function () use ($self) {
             $per_page = request()->input('per_page') ?? 10;
             $paginator = $this->paginate($per_page);

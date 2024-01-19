@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Design;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class DesignCotroller extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Design::filter()->paginate22();
+        $categories = Category::where('parent_id',null)->with('children')->get();
+        return $this->retrieve($categories);
     }
 
     /**
@@ -20,21 +21,21 @@ class DesignCotroller extends Controller
      */
     public function store(Request $request)
     {
-
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Design $design)
+    public function show(Category $category)
     {
-        return $this->retrieve($design);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Design $design)
+    public function update(Request $request, Category $category)
     {
         //
     }
@@ -42,7 +43,7 @@ class DesignCotroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Design $design)
+    public function destroy(Category $category)
     {
         //
     }
