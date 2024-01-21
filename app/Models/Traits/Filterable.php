@@ -20,6 +20,16 @@ trait Filterable
             'in' => 'in'
         ];
 
+        foreach ($request->all() as $key => $value) {
+
+            if(in_array($key,['sort','search']))
+                continue;
+            if (is_string($value))
+                $query->where($key, $value);
+            if (is_array($value))
+                $query->whereIn($key, $value);
+        }
+
         if ($request->filled('filters')) {
             foreach ($request->filters as $k => $v) {
 
