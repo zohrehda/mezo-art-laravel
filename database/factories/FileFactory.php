@@ -17,7 +17,8 @@ class FileFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'path'=>$this->faker->image('storage/app/designs') ,
+            'size'=>$this->faker->numberBetween(10,100),
         ];
     }
 }

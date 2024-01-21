@@ -28,7 +28,7 @@ class DesignCotroller extends Controller
      */
     public function show(Design $design)
     {
-        return $this->retrieve($design);
+        return $this->retrieve($design->loady());
     }
 
     /**

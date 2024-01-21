@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->morphs('fileable');
             $table->text('path');
             $table->string('size');
+            $table->string('section')->nullable();
             $table->timestamps();
         });
     }
