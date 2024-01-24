@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             TagSeeder::class,
             DesignSeeder::class,
+            PaletteSeeder::class,
+
         ]);
 
         // \App\Models\User::factory()->create([

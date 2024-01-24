@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->boolean('downloadable')->default(true);
             $table->boolean('status')->default(true);
             $table->foreignId('designer_id');
+            $table->string('package')->nullable();
             $table->foreignId('category_id')->nullable();
             $table->json('colors')->nullable();
             $table->timestamps();

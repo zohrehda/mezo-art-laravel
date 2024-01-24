@@ -12,6 +12,6 @@ class DesignSeeder extends Seeder
      */
     public function run(): void
     {
-        Design::factory()->count(2)->hasTags(2)->hasFiles(1)->create(['category_id'=>1]);
+        Design::factory()->count(2)->hasTags(2)->hasFiles(1, ['section' => 'ff'])->create(['category_id' => 1]);
     }
 }
