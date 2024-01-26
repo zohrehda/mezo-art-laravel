@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\File>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PrintCart>
  */
-class FileFactory extends Factory
+class PrintCartFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,11 +17,7 @@ class FileFactory extends Factory
     public function definition(): array
     {
         return [
-           // 'path' => $this->faker->image('storage/app/designs'),
-            'size' => $this->faker->numberBetween(10, 100),
+            //
         ];
     }
-
-   
-
 }

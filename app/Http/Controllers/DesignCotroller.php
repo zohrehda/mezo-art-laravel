@@ -46,4 +46,9 @@ class DesignCotroller extends Controller
     {
         //
     }
+
+    public function downloadFiles(Design $design)
+    {
+      return  $design->files ;   
+    }
 }

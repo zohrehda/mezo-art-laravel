@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PrintCartController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DesignCotroller;
@@ -31,7 +33,11 @@ Route::prefix('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
 });
 
+Route::get('designs/{design}/download', [DesignCotroller::class, 'downloadFiles']);
 Route::apiResource('/designs', DesignCotroller::class);
+
 Route::apiResource('/users', UserController::class);
 Route::apiResource('/categories', CategoryController::class)->withoutMiddleware('auth:sanctum');
+
+Route::apiResource('/print_cart', PrintCartController::class)->withoutMiddleware('auth:sanctum');
 

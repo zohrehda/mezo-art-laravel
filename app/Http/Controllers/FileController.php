@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
@@ -45,5 +46,10 @@ class FileController extends Controller
     public function destroy(File $file)
     {
         //
+    }
+
+    public function download(Request $request, File $file)
+    {
+        return response()->file(storage_path($file->path));
     }
 }

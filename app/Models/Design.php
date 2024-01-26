@@ -10,7 +10,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Design extends Model
 {
-    use HasFactory, Filterable, Taggable,Fileable; 
+    use HasFactory, Filterable, Taggable, Fileable;
+
+    public function siteFiles()
+    {
+        return $this->files()->where('section', 'site');
+    }
+
+    public function fakeFiles()
+    {
+        return $this->files()->where('section', 'fake');
+    }
+    public function originalFiles()
+    {
+        return $this->files()->where('section', 'main');
+    }
 
 
 }
