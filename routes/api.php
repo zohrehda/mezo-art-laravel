@@ -8,6 +8,7 @@ use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DesignCotroller;
+use App\Http\Controllers\DesignFileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::prefix('auth')->group(function () {
 
 Route::get('designs/{design}/download', [DesignCotroller::class, 'downloadFiles']);
 Route::apiResource('/designs', DesignCotroller::class);
+Route::apiResource('/design_files', DesignFileController::class);
 
 Route::apiResource('/users', UserController::class);
 Route::apiResource('/categories', CategoryController::class)->withoutMiddleware('auth:sanctum');

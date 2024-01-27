@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('file_id') ;
             $table->foreignId('user_id') ;
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

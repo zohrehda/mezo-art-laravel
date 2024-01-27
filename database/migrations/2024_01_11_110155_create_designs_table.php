@@ -21,7 +21,9 @@ return new class extends Migration {
             $table->string('package')->nullable();
             $table->foreignId('category_id')->nullable();
             $table->json('colors')->nullable();
+            $table->string('pinterest_link')->nullable() ;
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

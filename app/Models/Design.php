@@ -7,6 +7,7 @@ use App\Models\Traits\Filterable;
 use App\Models\Traits\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\DesignFile;
 
 class Design extends Model
 {
@@ -17,13 +18,9 @@ class Design extends Model
         return $this->files()->where('section', 'site');
     }
 
-    public function fakeFiles()
+    public function printFiles()
     {
-        return $this->files()->where('section', 'fake');
-    }
-    public function originalFiles()
-    {
-        return $this->files()->where('section', 'main');
+        return $this->hasMany(DesignFile::class, 'design_id');
     }
 
 

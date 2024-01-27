@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('size');
             $table->string('section')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

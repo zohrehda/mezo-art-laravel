@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('title');
             $table->string('hex');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

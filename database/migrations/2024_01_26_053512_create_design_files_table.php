@@ -10,10 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('taggables', function (Blueprint $table) {
+        Schema::create('design_files', function (Blueprint $table) {
             $table->id();
-            $table->morphs('taggable');
-            $table->foreignId('tag_id');
+            $table->foreignId('design_id');
+            $table->string('original_file_path');
+            $table->string('fake_file_path');
+            $table->string('size')->nullable();
+            $table->bigInteger('dpi')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->string('extension')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -24,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('taggables');
+        Schema::dropIfExists('design_files');
     }
 };

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\File>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DesignFile>
  */
-class FileFactory extends Factory
+class DesignFileFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,11 +17,11 @@ class FileFactory extends Factory
     public function definition(): array
     {
         return [
-            //'path' => $this->faker->image('storage/app/designs'),
             'size' => $this->faker->numberBetween(10, 100),
+            'dpi' => $this->faker->numberBetween(10, 100),
+            'mime_type' => $this->faker->mimeType(),
+            'extension' => $this->faker->fileExtension(),
+            
         ];
     }
-
-
-
 }
