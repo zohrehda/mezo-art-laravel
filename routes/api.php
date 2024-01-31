@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PrintCartController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
@@ -42,4 +43,5 @@ Route::apiResource('/users', UserController::class);
 Route::apiResource('/categories', CategoryController::class)->withoutMiddleware('auth:sanctum');
 
 Route::apiResource('/print_cart', PrintCartController::class)->withoutMiddleware('auth:sanctum');
+Route::apiResource('/tickets', TicketController::class)->withoutMiddleware('auth:sanctum');
 

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             DesignSeeder::class,
             PaletteSeeder::class,
-
+            TicketSeeder::class,
         ]);
 
         // \App\Models\User::factory()->create([
