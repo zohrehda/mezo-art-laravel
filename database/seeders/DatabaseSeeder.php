@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create();
 
         $this->call([
+            ProvinceSeeder::class,
+            CitySeeder::class,
             CategorySeeder::class,
             TagSeeder::class,
             DesignSeeder::class,

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'mobile',
         'username',
+        'brith_date' ,
         'password',
         'role',
     ];
@@ -46,4 +47,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function meta()
+    {
+        return $this->hasOne(UserMeta::class);
+    }
 }
+

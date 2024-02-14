@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Design;
+use App\Models\Province;
 use Illuminate\Http\Request;
 
-class DesignCotroller extends Controller
+class ProvinceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       // dd(request()->all());
-        return Design::filter()->paginate22();
+        $provinces = Province::all();
+        return $this->retrieve($provinces);
     }
 
     /**
@@ -21,21 +21,21 @@ class DesignCotroller extends Controller
      */
     public function store(Request $request)
     {
-
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Design $design)
+    public function show(Province $province)
     {
-        return $this->retrieve($design->loady());
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Design $design)
+    public function update(Request $request, Province $province)
     {
         //
     }
@@ -43,13 +43,8 @@ class DesignCotroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Design $design)
+    public function destroy(Province $province)
     {
         //
-    }
-
-    public function downloadFiles(Design $design)
-    {
-      return  $design->files ;   
     }
 }

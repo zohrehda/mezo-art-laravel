@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Design;
+use App\Models\UserMeta;
 use Illuminate\Http\Request;
 
-class DesignCotroller extends Controller
+class UserMetaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       // dd(request()->all());
-        return Design::filter()->paginate22();
+        //
     }
 
     /**
@@ -21,21 +20,21 @@ class DesignCotroller extends Controller
      */
     public function store(Request $request)
     {
-
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Design $design)
+    public function show(UserMeta $userMeta)
     {
-        return $this->retrieve($design->loady());
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Design $design)
+    public function update(Request $request, UserMeta $userMeta)
     {
         //
     }
@@ -43,13 +42,8 @@ class DesignCotroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Design $design)
+    public function destroy(UserMeta $userMeta)
     {
         //
-    }
-
-    public function downloadFiles(Design $design)
-    {
-      return  $design->files ;   
     }
 }

@@ -42,15 +42,16 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ValidationException $e) {
             return $this->response(get_nested_array_values($e->validator->errors()->messages()), [], 422);
         });
-
+        
         $this->renderable(function (AuthenticationException $e) {
+           // dd('dd');
             return $this->response($e->getMessage(), [], 401);
         });
 
         $this->renderable(function (Throwable $e) {
 
             $status_code = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
-            //    return $this->response($e->getMessage(), [], $status_code);
+                return $this->response($e->getMessage(), [], $status_code);
         });
 
     }

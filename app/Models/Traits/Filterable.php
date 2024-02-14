@@ -56,6 +56,7 @@ trait Filterable
         if ($request->filled('sort')) {
             $explode = explode(',', $request->sort);
             $sort = $explode[0];
+           // dd($sort);
             $order = $explode[1] ?? 'asc';
 
             // in_array($explode[0], $this->fillable) and 

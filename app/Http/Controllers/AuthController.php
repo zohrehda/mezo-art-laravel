@@ -138,4 +138,35 @@ class AuthController extends Controller
         auth()->user()->currentAccessToken()->delete();
         return $this->response('user logout');
     }
+
+    public function me()
+    {
+        $user = auth()->user()->load('meta');
+        return $this->retrieve($user);
+    }
+
+    public function updateMe(Request $request)
+    {
+        $validator = $request->apiValidate([
+            'email' => 'sometimes',
+            'mobile' => 'sometimes',
+            'first_name' => 'sometimes',
+            'last_name' => 'sometimes',
+            'brith_date' => 'sometimes',
+            // 
+            'brand_name' => 'sometimes',
+            'guild' => 'sometimes',
+            'province_id' => 'sometimes|exists:provinces',
+            'city_id' => 'sometimes|exists:cities',
+            'address' => 'sometimes',
+            'est_year' => 'date',
+
+        ]);
+
+        auth()->user()->update($validator->validated());
+        auth()->user()->meta()->updateOrCreate(['user_id', auth()->user()->id], $validator->validated());
+        return $this->updatedResponse(auth()->user());
+    }
+
+
 }

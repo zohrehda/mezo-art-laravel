@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\PrintCartController;
+use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
@@ -32,7 +34,9 @@ Route::prefix('auth')->group(function () {
     Route::post('/verifyPassword', [AuthController::class, 'verifyPassword'])->withoutMiddleware('auth:sanctum');
     Route::post('/verifyOtp', [AuthController::class, 'verifyOtp'])->withoutMiddleware('auth:sanctum');
     Route::post('/sendOtp', [AuthController::class, 'sendOtp'])->withoutMiddleware('auth:sanctum');
-    Route::get('/logout', [AuthController::class, 'logout']);
+    Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::get('/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
+    Route::put('/me', [AuthController::class, 'updateMe'])->middleware('auth:sanctum');
 });
 
 Route::get('designs/{design}/download', [DesignCotroller::class, 'downloadFiles']);
@@ -40,8 +44,10 @@ Route::apiResource('/designs', DesignCotroller::class);
 Route::apiResource('/design_files', DesignFileController::class);
 
 Route::apiResource('/users', UserController::class);
-Route::apiResource('/categories', CategoryController::class)->withoutMiddleware('auth:sanctum');
+Route::apiResource('/categories', CategoryController::class);
 
-Route::apiResource('/print_cart', PrintCartController::class)->withoutMiddleware('auth:sanctum');
-Route::apiResource('/tickets', TicketController::class)->withoutMiddleware('auth:sanctum');
+Route::apiResource('/print_cart', PrintCartController::class);
+Route::apiResource('/tickets', TicketController::class);
+Route::apiResource('/provinces', ProvinceController::class);
+Route::apiResource('/cities', CityController::class);
 
