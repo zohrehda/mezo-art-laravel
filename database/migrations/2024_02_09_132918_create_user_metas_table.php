@@ -18,7 +18,8 @@ return new class extends Migration {
             $table->string('province_id')->nullable();
             $table->string('city_id')->nullable();
             $table->text('address')->nullable();
-            $table->dateTime('est_year');
+            $table->dateTime('est_year')->nullable();
+            $table->bigInteger('phone_number')->nullable();
             $table->timestamps();
         });
     }

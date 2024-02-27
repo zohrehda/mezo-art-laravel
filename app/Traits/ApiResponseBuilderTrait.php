@@ -9,7 +9,7 @@ trait ApiResponseBuilderTrait
     {
         return response()->json([
             'status_code' => $status_code,
-            'message' => is_array($message) ? $message : [$message],
+            'messages' => is_array($message) ? $message : [$message],
             'data' => $data,
             'meta' => $meta,
         ], 200);

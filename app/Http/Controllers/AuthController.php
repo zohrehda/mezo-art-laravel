@@ -147,6 +147,7 @@ class AuthController extends Controller
 
     public function updateMe(Request $request)
     {
+      //  dd($request->all());
         $validator = $request->apiValidate([
             'email' => 'sometimes',
             'mobile' => 'sometimes',
@@ -155,16 +156,18 @@ class AuthController extends Controller
             'brith_date' => 'sometimes',
             // 
             'brand_name' => 'sometimes',
+            'phone_number' => 'sometimes',
             'guild' => 'sometimes',
-            'province_id' => 'sometimes|exists:provinces',
-            'city_id' => 'sometimes|exists:cities',
+            'province_id' => 'nullable|sometimes|exists:provinces,id',
+            'city_id' => 'nullable|sometimes|exists:cities,id',
             'address' => 'sometimes',
             'est_year' => 'date',
 
         ]);
 
+
         auth()->user()->update($validator->validated());
-        auth()->user()->meta()->updateOrCreate(['user_id', auth()->user()->id], $validator->validated());
+        auth()->user()->meta()->updateOrCreate(['user_id' => auth()->user()->id], $validator->validated());
         return $this->updatedResponse(auth()->user());
     }
 

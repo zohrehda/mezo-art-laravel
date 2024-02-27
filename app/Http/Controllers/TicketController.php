@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -12,8 +13,8 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::all();
-        return $this->retrieve($tickets);
+        return Ticket::filter()->paginate22();
+
     }
 
     /**
@@ -21,7 +22,26 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->apiValidate([
+            'subject' => 'required',
+            'title' => 'required',
+            'priority' => 'required',
+            'ref' => 'required',
+            'message' => 'required'
+        ]);
+        $ticket = DB::transaction(function () use ($validator, $request) {
+
+            $ticket = Ticket::create($validator->validated() + ['user_id', auth()->user()->id]);
+            $ticket->messages()->create([
+                'user_id' => auth()->user()->id,
+                'message' => $request->message,
+                'ticket_id' => $ticket->id,
+            ]);
+            return $ticket;
+        });
+
+        return $this->retrieve($ticket);
+
     }
 
     /**

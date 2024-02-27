@@ -47,7 +47,8 @@ Route::apiResource('/users', UserController::class);
 Route::apiResource('/categories', CategoryController::class);
 
 Route::apiResource('/print_cart', PrintCartController::class);
-Route::apiResource('/tickets', TicketController::class);
+Route::apiResource('/tickets', TicketController::class)->middleware('auth:sanctum');
 Route::apiResource('/provinces', ProvinceController::class);
 Route::apiResource('/cities', CityController::class);
+
 

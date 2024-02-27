@@ -48,11 +48,11 @@ class Handler extends ExceptionHandler
             return $this->response($e->getMessage(), [], 401);
         });
 
-        $this->renderable(function (Throwable $e) {
+        // $this->renderable(function (Throwable $e) {
 
-            $status_code = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
-                return $this->response($e->getMessage(), [], $status_code);
-        });
+        //     $status_code = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
+        //         return $this->response($e->getMessage(), [], $status_code);
+        // });
 
     }
 }

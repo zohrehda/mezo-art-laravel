@@ -21,6 +21,7 @@ class TicketFactory extends Factory
             'uuid' => $this->faker->uuid,
             'title' => $this->faker->word,
             'priority' => 'low',
+            'ref' => 'sales',
             'status' => 'open',
             'user_id'=>1 ,
             

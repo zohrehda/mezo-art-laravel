@@ -12,7 +12,8 @@ class CityController extends Controller
      */
     public function index()
     {
-        //
+        $cities = City::filter()->get();
+        return $this->retrieve($cities);
     }
 
     /**

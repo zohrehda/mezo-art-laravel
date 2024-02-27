@@ -14,6 +14,7 @@ class UserMeta extends Model
         'province_id',
         'city_id',
         'address',
-        'est_year'
+        'est_year',
+        'phone_number'
     ];
 }

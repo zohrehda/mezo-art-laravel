@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->uuid('uuid');
             $table->string('title');
             $table->string('priority');
+            $table->string('ref');
             $table->foreignId('user_id');
             $table->string('status');
             $table->boolean('is_resolved')->default(0);

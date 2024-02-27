@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
         });
         $self = $this;
         Builder::macro('paginate22', function () use ($self) {
-            $per_page = request()->input('per_page') ?? 10;
+            $per_page = request()->input('per_page') ?? 5;
             $paginator = $this->paginate($per_page);
             return $self->response('data retrieved in pagination', $paginator->items(), 200, [
                 'per_page' => $paginator->perPage(),
