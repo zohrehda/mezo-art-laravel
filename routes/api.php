@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\PrintCartController;
 use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
@@ -48,7 +51,10 @@ Route::apiResource('/categories', CategoryController::class);
 
 Route::apiResource('/print_cart', PrintCartController::class);
 Route::apiResource('/tickets', TicketController::class)->middleware('auth:sanctum');
+Route::apiResource('/ticket_messages', TicketMessageController::class)->middleware('auth:sanctum');
 Route::apiResource('/provinces', ProvinceController::class);
 Route::apiResource('/cities', CityController::class);
+Route::apiResource('/blogs', BlogController::class);
+Route::apiResource('/tags', TagController::class);
 
 

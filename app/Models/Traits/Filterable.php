@@ -22,7 +22,7 @@ trait Filterable
 
         foreach ($request->all() as $key => $value) {
 
-            if(in_array($key,['sort','search','with','page','per_page']))
+            if(in_array($key,['sort','search','with','page','per_page','ds']))
                 continue;
             if (is_string($value))
                 $query->where($key, $value);

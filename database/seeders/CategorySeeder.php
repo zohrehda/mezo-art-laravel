@@ -14,7 +14,9 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::factory()->count(3)->create()->each(function ($category) {
-            Category::factory()->create(['parent_id'=>$category->id]);
+            Category::factory()->create(['type' => 'design', 'parent_id' => $category->id]);
         });
+
+        Category::factory()->count(3)->create(['type' => 'blog']);
     }
 }

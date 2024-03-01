@@ -31,7 +31,7 @@ class TicketController extends Controller
         ]);
         $ticket = DB::transaction(function () use ($validator, $request) {
 
-            $ticket = Ticket::create($validator->validated() + ['user_id', auth()->user()->id]);
+            $ticket = Ticket::create($validator->validated() + ['user_id' => auth()->user()->id]);
             $ticket->messages()->create([
                 'user_id' => auth()->user()->id,
                 'message' => $request->message,
@@ -49,7 +49,8 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        //
+
+        return $this->retrieve($ticket->loady());
     }
 
     /**

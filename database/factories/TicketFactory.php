@@ -18,7 +18,7 @@ class TicketFactory extends Factory
     {
         return [
             'subject' => $this->faker->word,
-            'uuid' => $this->faker->uuid,
+          //  'uuid' => $this->faker->uuid,
             'title' => $this->faker->word,
             'priority' => 'low',
             'ref' => 'sales',

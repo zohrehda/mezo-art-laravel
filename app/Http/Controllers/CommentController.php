@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
-class TagController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tags=Tag::filter()->get() ;
-        return $this->retrieve($tags) ;
+        //
     }
 
     /**
@@ -27,7 +26,7 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tag $tag)
+    public function show(Comment $comment)
     {
         //
     }
@@ -35,7 +34,7 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, Comment $comment)
     {
         //
     }
@@ -43,7 +42,7 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tag $tag)
+    public function destroy(Comment $comment)
     {
         //
     }

@@ -10,15 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('tickets', function (Blueprint $table) {
+        Schema::create('blogs', function (Blueprint $table) {
             $table->id();
-            $table->string('subject');
+            $table->foreignId('category_id');
             $table->string('title');
-            $table->string('priority');
-            $table->string('ref');
-            $table->foreignId('user_id');
-            $table->string('status');
-            $table->boolean('is_resolved')->default(0);
+            $table->longText('content');
+            $table->longText('slug');
+            $table->foreignId('author_id');
+            $table->boolean('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('tickets');
+        Schema::dropIfExists('blogs');
     }
 };

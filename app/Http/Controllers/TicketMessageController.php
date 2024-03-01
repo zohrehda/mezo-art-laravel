@@ -20,7 +20,13 @@ class TicketMessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->apiValidate([
+            'ticket_id' => 'required',
+            'message' => 'required',
+        ]);
+
+        $ticket_message = TicketMessage::create($validator->validated() + ['user_id' => auth()->user()->id]);
+        return $this->createdResponse($ticket_message);
     }
 
     /**
