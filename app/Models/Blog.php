@@ -51,4 +51,9 @@ class Blog extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function author()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }
