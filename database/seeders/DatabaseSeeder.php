@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             CategorySeeder::class,
             TagSeeder::class,
-        //    DesignSeeder::class,
+            DesignSeeder::class,
             PaletteSeeder::class,
             TicketSeeder::class,
             BlogSeeder::class

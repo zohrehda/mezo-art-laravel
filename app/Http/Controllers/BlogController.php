@@ -22,7 +22,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::filter()->get();
+        $blogs = Blog::filter()->withCount('comments')->get();
         return $this->retrieve($blogs);
     }
 

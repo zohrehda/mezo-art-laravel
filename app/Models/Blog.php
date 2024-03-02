@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Str;
 
 class Blog extends Model
 {
@@ -20,7 +21,7 @@ class Blog extends Model
         'category_id',
         'author_id'
     ];
-    protected $appends = ['tag_ids', 'category_name'];
+    protected $appends = ['tag_ids', 'category_name', 'excerpt'];
     protected function tagIds(): Attribute
     {
         return new Attribute(
@@ -32,6 +33,12 @@ class Blog extends Model
     {
         return new Attribute(
             get: fn() => $this->category->name
+        );
+    }
+    protected function excerpt(): Attribute
+    {
+        return new Attribute(
+            get: fn() => Str::words($this->content, 3000)
         );
     }
 
@@ -55,5 +62,7 @@ class Blog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
 
 }
