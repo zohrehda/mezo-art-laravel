@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\DB;
 class BlogController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only(['store', 'update']);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -32,7 +40,7 @@ class BlogController extends Controller
         ]);
         $blog = DB::transaction(function () use ($validator, $request) {
 
-            $blog = Blog::create($validator->validated() + ['slug' => Str::slug($request->title)]);
+            $blog = Blog::create($validator->validated() + ['slug' => Str::slug($request->title), 'author_id' => auth()->user()->id]);
             $blog->tags()->sync($request->tag_ids);
             return $blog;
         });
