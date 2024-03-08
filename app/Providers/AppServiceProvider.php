@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,5 +50,12 @@ class AppServiceProvider extends ServiceProvider
 
             ]);
         });
+        Str::macro('readDuration', function(...$text) {
+            $totalWords = str_word_count(implode(" ", $text));
+            $minutesToRead = round($totalWords / 200);
+        
+            return (int)max(1, $minutesToRead);
+        });
+        
     }
 }

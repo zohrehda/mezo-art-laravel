@@ -21,7 +21,7 @@ class Blog extends Model
         'category_id',
         'author_id'
     ];
-    protected $appends = ['tag_ids', 'category_name', 'excerpt'];
+    protected $appends = ['tag_ids', 'category_name', 'excerpt','create_date','read_time'];
     protected function tagIds(): Attribute
     {
         return new Attribute(
@@ -42,6 +42,19 @@ class Blog extends Model
         );
     }
 
+    protected function createDate(): Attribute
+    { //formatWord('l dS F');
+        return new Attribute(
+            get: fn() => verta($this->created_at)->format('%d %B، %Y')
+        );
+    }
+
+    protected function readTime(): Attribute
+    { //formatWord('l dS F');
+        return new Attribute(
+            get: fn() => Str::readDuration($this->content)
+        );
+    }
 
     public function tags(): MorphToMany
     {
