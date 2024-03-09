@@ -8,10 +8,28 @@ use App\Models\Traits\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\DesignFile;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Design extends Model
 {
     use HasFactory, Filterable, Taggable, Fileable;
+
+    protected $fillable = [
+        'code',
+        'print_type',
+        'design_type',
+        'downloadable',
+        'status',
+        'private',
+        'designer_id',
+        'package',
+        'category_id',
+        'colors',
+        'pinterest_link',
+    ];
+
+    protected $appends=['tag_ids'] ;
 
     public function siteFiles()
     {
@@ -21,6 +39,18 @@ class Design extends Model
     public function printFiles()
     {
         return $this->hasMany(DesignFile::class, 'design_id');
+    }
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    protected function tagIds(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->tags->pluck('id')
+        );
     }
 
 

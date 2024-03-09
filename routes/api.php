@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\PaletteController;
 use App\Http\Controllers\PrintCartController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\TagController;
@@ -56,5 +57,6 @@ Route::apiResource('/provinces', ProvinceController::class);
 Route::apiResource('/cities', CityController::class);
 Route::apiResource('/blogs', BlogController::class);
 Route::apiResource('/tags', TagController::class);
+Route::apiResource('/palette', PaletteController::class);
 
 

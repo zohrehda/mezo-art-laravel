@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('design_type');
             $table->boolean('downloadable')->default(true);
             $table->boolean('status')->default(true);
+            $table->boolean('private')->default(false);
             $table->foreignId('designer_id');
             $table->string('package')->nullable();
             $table->foreignId('category_id')->nullable();

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('palette', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('name');
             $table->string('hex');
             $table->timestamps();
             $table->softDeletes();

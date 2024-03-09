@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Design;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DesignCotroller extends Controller
 {
@@ -12,7 +13,7 @@ class DesignCotroller extends Controller
      */
     public function index()
     {
-       // dd(request()->all());
+        // dd(request()->all());
         return Design::filter()->paginate22();
     }
 
@@ -21,7 +22,22 @@ class DesignCotroller extends Controller
      */
     public function store(Request $request)
     {
+        $validator = $request->apiValidate([
 
+            'print_type' => 'required',
+            'design_type' => 'required',
+            'downloadable' => 'required',
+            'private' => 'required|boolean',
+            'designer_id' => 'required|exists:users,id',
+            'package' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            //  'colors' => 'required',
+            'pinterest_link' => 'nullable',
+        ]);
+        DB::transaction(function () use ($validator) {
+            $design = Design::create($validator->validated());
+            // $design->tags()->sync($validator-)
+        });
     }
 
     /**
@@ -37,7 +53,31 @@ class DesignCotroller extends Controller
      */
     public function update(Request $request, Design $design)
     {
-        //
+        $validator = $request->apiValidate([
+
+            'print_type' => 'sometimes',
+            'design_type' => 'sometimes',
+            'downloadable' => 'sometimes',
+            'private' => 'sometimes|boolean',
+            'designer_id' => 'sometimes|exists:users,id',
+            'package' => 'sometimes',
+            'category_id' => 'nullable|exists:categories,id',
+            //  'colors' => 'required',
+            'pinterest_link' => 'nullable',
+            'tag_ids' => 'array|sometimes',
+            'tag_ids.*' => 'exists:tags,id',
+
+        ]);
+        $design = DB::transaction(function () use ($validator, $design, $request) {
+            $design->update($validator->validated());
+
+            if ($request->filled('tag_ids'))
+                $design->tags()->sync($request->tag_ids);
+
+            return $design;
+        });
+
+        return $this->updatedResponse($design);
     }
 
     /**
@@ -50,6 +90,6 @@ class DesignCotroller extends Controller
 
     public function downloadFiles(Design $design)
     {
-      return  $design->files ;   
+        return $design->files;
     }
 }

@@ -12,7 +12,8 @@ class PaletteController extends Controller
      */
     public function index()
     {
-        //
+        $palette = Palette::filter()->get();
+        return $this->retrieve($palette);
     }
 
     /**
