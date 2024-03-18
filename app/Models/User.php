@@ -27,6 +27,8 @@ class User extends Authenticatable
         'brith_date',
         'password',
         'role',
+        'last_login_at',
+
     ];
 
     /**

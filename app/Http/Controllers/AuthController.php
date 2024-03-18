@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponseBuilderTrait;
 use Illuminate\Support\Facades\Cache;
@@ -120,16 +122,18 @@ class AuthController extends Controller
     public function login()
     {
         $field = $this->login_type;
-        // dd($field);
+
         $user = User::firstOrCreate([
             "$field" => $this->username,
         ]);
 
         $token = $user->createToken('otp');
+        $user->update(['last_login_at' => Carbon::now()]);
         return [
             'token' => $token->plainTextToken,
             'user' => $user->refresh(),
         ];
+
     }
 
 
@@ -147,7 +151,7 @@ class AuthController extends Controller
 
     public function updateMe(Request $request)
     {
-      //  dd($request->all());
+        //  dd($request->all());
         $validator = $request->apiValidate([
             'email' => 'sometimes',
             'mobile' => 'sometimes',
