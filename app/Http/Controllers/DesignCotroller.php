@@ -26,18 +26,21 @@ class DesignCotroller extends Controller
 
             'print_type' => 'required',
             'design_type' => 'required',
-            'downloadable' => 'required',
+            'downloadable' => 'boolean',
             'private' => 'required|boolean',
             'designer_id' => 'required|exists:users,id',
             'package' => 'required',
             'category_id' => 'required|exists:categories,id',
-            //  'colors' => 'required',
+            'colors' => 'array',
+            'colors.*' => 'exists:palette,id',
             'pinterest_link' => 'nullable',
         ]);
-        DB::transaction(function () use ($validator) {
+        $design = DB::transaction(function () use ($validator) {
             $design = Design::create($validator->validated());
             // $design->tags()->sync($validator-)
+            return $design;
         });
+        return $this->createdResponse($design);
     }
 
     /**

@@ -29,7 +29,8 @@ class Design extends Model
         'pinterest_link',
     ];
 
-    protected $appends=['tag_ids'] ;
+    protected $appends = ['tag_ids'];
+    protected $attributes = ['downloadable' => 1, 'code' => 33];
 
     public function siteFiles()
     {
@@ -50,6 +51,14 @@ class Design extends Model
     {
         return new Attribute(
             get: fn() => $this->tags->pluck('id')
+        );
+    }
+
+    protected function colors(): Attribute
+    {
+        return new Attribute(
+            set: fn($value) => json_encode($value),
+            get: fn($value) => json_decode($value, true),
         );
     }
 

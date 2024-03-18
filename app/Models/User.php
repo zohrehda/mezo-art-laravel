@@ -24,7 +24,7 @@ class User extends Authenticatable
         'email',
         'mobile',
         'username',
-        'brith_date' ,
+        'brith_date',
         'password',
         'role',
     ];
@@ -39,9 +39,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $attributes=[
-        'role'=>'user'
-    ] ;
+    protected $attributes = [
+        'role' => 'user'
+    ];
 
     /**
      * The attributes that should be cast.
@@ -58,7 +58,7 @@ class User extends Authenticatable
         return $this->hasOne(UserMeta::class);
     }
 
-    // protected $appends = ['tag_ids', 'category_name'];
+    // protected $appends = ['fullName'];
     // protected function fullName(): Attribute
     // {
     //     return new Attribute(
