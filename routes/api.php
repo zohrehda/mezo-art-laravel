@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DesignCotroller;
 use App\Http\Controllers\DesignFileController;
+use App\Http\Controllers\SubscriberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +51,7 @@ Route::apiResource('/design_files', DesignFileController::class);
 Route::apiResource('/users', UserController::class);
 Route::apiResource('/categories', CategoryController::class);
 
-Route::apiResource('/print_cart', PrintCartController::class);
+Route::apiResource('/print_cart', PrintCartController::class)->middleware('auth:sanctum');
 Route::apiResource('/tickets', TicketController::class)->middleware('auth:sanctum');
 Route::apiResource('/ticket_messages', TicketMessageController::class)->middleware('auth:sanctum');
 Route::apiResource('/provinces', ProvinceController::class);
@@ -60,3 +61,6 @@ Route::apiResource('/tags', TagController::class);
 Route::apiResource('/palette', PaletteController::class);
 
 
+Route::post('/subscribe', [SubscriberController::class, 'store']);
+Route::get('/subscribe', [SubscriberController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/subscribe/{hash}', [SubscriberController::class, 'verify'])->name('subscribe.confirm');

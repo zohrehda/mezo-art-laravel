@@ -22,14 +22,14 @@ trait Filterable
 
         foreach ($request->all() as $key => $value) {
 
-            if(in_array($key,['sort','search','with','page','per_page','ds']))
+            if(in_array($key,['sort','search','with','filters','page','per_page','ds']))
                 continue;
             if (is_string($value))
                 $query->where($key, $value);
             if (is_array($value))
                 $query->whereIn($key, $value);
         }
-
+      //  echo $request->filters ;
         if ($request->filled('filters')) {
             foreach ($request->filters as $k => $v) {
 

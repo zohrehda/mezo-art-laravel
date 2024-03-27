@@ -65,7 +65,7 @@ class DesignCotroller extends Controller
             'designer_id' => 'sometimes|exists:users,id',
             'package' => 'sometimes',
             'category_id' => 'nullable|exists:categories,id',
-            //  'colors' => 'required',
+            'colors' => 'array',
             'pinterest_link' => 'nullable',
             'tag_ids' => 'array|sometimes',
             'tag_ids.*' => 'exists:tags,id',

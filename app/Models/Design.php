@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DesignPrintType;
 use App\Models\Traits\Fileable;
 use App\Models\Traits\Filterable;
 use App\Models\Traits\Taggable;
@@ -58,8 +59,39 @@ class Design extends Model
     {
         return new Attribute(
             set: fn($value) => json_encode($value),
-            get: fn($value) => json_decode($value, true),
+            get: fn($value) => Palette::whereIn('id', json_decode($value, true) ?? [])->get()->toArray(),
+
         );
+    }
+
+    protected function PrintTypeFa(): Attribute
+    {
+        return new Attribute(
+
+            get: fn($value) => match ($value) {
+                DesignPrintType::SUB => 'سابلیمیشن',
+                DesignPrintType::DTF => 'دی تی اف',
+
+            }
+        );
+    }
+
+    public function jsonSerialize(): mixed
+    {
+
+        return [
+
+            ...$this->toArray(),
+            'print_type_fa' => trans("messages.print_type." . $this->print_type),
+            'design_type_fa' => trans("messages.design_type." . $this->design_type)
+
+        ];
+    }
+
+    public function scopeModelFilter($query)
+    {
+        $search = request()->input('search');
+       // $query->where()
     }
 
 

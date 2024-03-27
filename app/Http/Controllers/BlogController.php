@@ -22,8 +22,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::filter()->withCount('comments')->get();
-        return $this->retrieve($blogs);
+        return Blog::filter()->withCount('comments')->paginate22();
     }
 
     /**

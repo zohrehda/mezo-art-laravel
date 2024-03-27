@@ -12,7 +12,8 @@ class PrintCartController extends Controller
      */
     public function index()
     {
-        //
+        $cart = PrintCart::filter()->where('user_id', auth()->user()->id)->get();
+        return $this->retrieve($cart);
     }
 
     /**
@@ -28,9 +29,10 @@ class PrintCartController extends Controller
 
         $data = [];
 
-      //  dd($request['files']) ;
-        foreach ($request['files'] as $file) {
-        //    dd($file);
+        //   dd($request->all() ) ;
+        //  dd($request['files']) ;
+        foreach ($request->input('files') as $file) {
+            //    dd($file);
             PrintCart::updateOrCreate([
                 'file_id' => $file,
                 'user_id' => 1
@@ -40,7 +42,7 @@ class PrintCartController extends Controller
             ]);
         }
 
-        return $this->createdResponse([]);
+        return $this->response(trans('messages.cart.created'), []);
 
         //  $data[]=[ 'file_id'=>$file , 'user_id'=>1 ] ;
 
@@ -68,6 +70,7 @@ class PrintCartController extends Controller
      */
     public function destroy(PrintCart $printCart)
     {
-        //
+        $printCart->delete();
+        return $this->deletedResponse();
     }
 }

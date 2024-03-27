@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Filterable;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ class Blog extends Model
         'category_id',
         'author_id'
     ];
-    protected $appends = ['tag_ids', 'category_name', 'excerpt','create_date','read_time'];
+    protected $appends = ['tag_ids', 'category_name', 'excerpt', 'create_date', 'read_time'];
     protected function tagIds(): Attribute
     {
         return new Attribute(
@@ -76,6 +77,12 @@ class Blog extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopeModelFilter(Builder $query)
+    {
+        $search = request()->input('search');
+        if ($search)
+            $query->where('title', 'like', "%$search%")->orWhere('content', 'like', "%$search%");
+    }
 
 
 }
