@@ -13,8 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
+        return User::filter()->paginate22();
         $users = User::all();
-      return  $this->retrieve($users);
+        return $this->retrieve($users);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Tickets\TicketStatus;
+use App\Enums\UserRole;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,7 +31,13 @@ class Ticket extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('access', function (Builder $builder) {
-            $builder->where('user_id',auth()->user()->id );
+            $user = request()->user('sanctum');
+
+            if ($user && $user->role == UserRole::ADMIN->value)
+                return $builder;
+            else
+                $builder->where('user_id', auth()->user()->id);
+
         });
     }
 

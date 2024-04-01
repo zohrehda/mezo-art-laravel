@@ -2,7 +2,9 @@
 
 return [
     'created' => ':attribute  با موفقیت ثبت شد.',
-    'cart' => [
+    'updated' => 'اطلاعات با موفقیت ویراش شد',
+    'uploaded' => ':attribute  با موفقیت آپلود شد.',
+     'cart' => [
         'created' => 'طرح به سبد چاپ شما اضافه شد'
     ],
     'print_type' => [

@@ -15,9 +15,12 @@ class File extends Model
         'fileable_type',
         'fileable_id',
         'path',
-        'size'
+        'size',
+        'extension',
+        'section',
+        'mime_type',
     ];
-    protected $appends = ['link','is_in_print_cart'];
+    protected $appends = ['link', 'is_in_print_cart'];
 
     protected function link(): Attribute
     {
@@ -26,9 +29,11 @@ class File extends Model
         );
     }
 
-    protected function getIsInPrintCartAttribute(){
-        return PrintCart::where('file_id', $this->id)->where('user_id', 1)->count() >0 ;
+    protected function getIsInPrintCartAttribute()
+    {
+        return PrintCart::where('file_id', $this->id)->where('user_id', 1)->count() > 0;
     }
+
 
     // protected function isInPrintCart(): Attribute
     // { //  PrintCart::where('file_id', $this->id)->where('user_id', 1)->count() >0

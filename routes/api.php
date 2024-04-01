@@ -40,6 +40,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/verifyOtp', [AuthController::class, 'verifyOtp'])->withoutMiddleware('auth:sanctum');
     Route::post('/sendOtp', [AuthController::class, 'sendOtp'])->withoutMiddleware('auth:sanctum');
     Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('/me/image', [AuthController::class, 'uploadImage'])->middleware('auth:sanctum');
     Route::get('/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
     Route::put('/me', [AuthController::class, 'updateMe'])->middleware('auth:sanctum');
 });
@@ -48,7 +49,7 @@ Route::get('designs/{design}/download', [DesignCotroller::class, 'downloadFiles'
 Route::apiResource('/designs', DesignCotroller::class);
 Route::apiResource('/design_files', DesignFileController::class);
 
-Route::apiResource('/users', UserController::class);
+Route::apiResource('/users', UserController::class)->middleware('auth:sanctum');
 Route::apiResource('/categories', CategoryController::class);
 
 Route::apiResource('/print_cart', PrintCartController::class)->middleware('auth:sanctum');
@@ -64,3 +65,6 @@ Route::apiResource('/palette', PaletteController::class);
 Route::post('/subscribe', [SubscriberController::class, 'store']);
 Route::get('/subscribe', [SubscriberController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/subscribe/{hash}', [SubscriberController::class, 'verify'])->name('subscribe.confirm');
+Route::post('/upload', [FileController::class, 'upload'])->name('files.upload');
+Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
+

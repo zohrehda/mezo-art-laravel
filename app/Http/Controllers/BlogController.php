@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -30,17 +31,37 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+
         $validator = $request->apiValidate([
             'title' => 'required',
             'content' => 'required',
             'category_id' => 'exists:categories,id',
             'status' => 'boolean',
-            'tag_ids' => 'array'
+            'tag_ids' => 'array',
+            'thumbnail_id' => 'nullable|exists:files,id',
+            'poster_id' => 'nullable|exists:files,id',
         ]);
         $blog = DB::transaction(function () use ($validator, $request) {
 
             $blog = Blog::create($validator->validated() + ['slug' => Str::slug($request->title), 'author_id' => auth()->user()->id]);
             $blog->tags()->sync($request->tag_ids);
+
+            if ($request->filled('thumbnail_id'))
+                File::find($request->input('thumbnail_id'))->update(
+                    [
+                        'section' => 'thumbnail',
+                        'fileable_type' => Blog::class,
+                        'fileable_id' => $blog->id
+                    ]
+                );
+            if ($request->filled('poster_id'))
+                File::find($request->input('poster_id'))->update(
+                    [
+                        'section' => 'poster',
+                        'fileable_type' => Blog::class,
+                        'fileable_id' => $blog->id
+                    ]
+                );
             return $blog;
         });
         return $this->createdResponse($blog);
@@ -65,7 +86,9 @@ class BlogController extends Controller
             'category_id' => 'sometimes|nullable|exists:categories,id',
             'status' => 'boolean',
             'tag_ids' => 'array',
-            'tag_ids.*' => 'exists:tags,id'
+            'tag_ids.*' => 'exists:tags,id',
+            'thumbnail_id' => 'nullable|exists:files,id',
+            'poster_id' => 'nullable|exists:files,id',
         ]);
 
         $blog = DB::transaction(function () use ($validator, $request, $blog) {
@@ -73,6 +96,25 @@ class BlogController extends Controller
 
             if ($request->tag_ids)
                 $blog->tags()->sync($request->tag_ids);
+
+
+            if ($request->filled('thumbnail_id'))
+                File::find($request->input('thumbnail_id'))->update(
+                    [
+                        'section' => 'thumbnail',
+                        'fileable_type' => Blog::class,
+                        'fileable_id' => $blog->id
+                    ]
+                );
+
+            if ($request->filled('poster_id'))
+                File::find($request->input('poster_id'))->update(
+                    [
+                        'section' => 'poster',
+                        'fileable_type' => Blog::class,
+                        'fileable_id' => $blog->id
+                    ]
+                );
 
             return $blog->refresh();
 

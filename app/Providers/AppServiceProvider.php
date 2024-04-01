@@ -29,10 +29,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Request::macro('apiValidate', function ($rules, $data = null) {
+        Request::macro('apiValidate', function ($rules, $data = null, callable $after = null) {
 
             $data = $data ?? $this->all();
             $validator = Validator::make($data, $rules);
+
+            if ($after)
+                $after($validator);
 
             if ($validator->fails()) {
                 throw new ValidationException($validator);
@@ -41,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
         });
         $self = $this;
         Builder::macro('paginate22', function () use ($self) {
-            $per_page = request()->input('per_page') ?? 1;
+            $per_page = request()->input('per_page') ?? 15;
             $paginator = $this->paginate($per_page);
             return $self->response('data retrieved in pagination', $paginator->items(), 200, [
                 'per_page' => $paginator->perPage(),
@@ -50,12 +53,12 @@ class AppServiceProvider extends ServiceProvider
 
             ]);
         });
-        Str::macro('readDuration', function(...$text) {
+        Str::macro('readDuration', function (...$text) {
             $totalWords = str_word_count(implode(" ", $text));
             $minutesToRead = round($totalWords / 200);
-        
-            return (int)max(1, $minutesToRead);
+
+            return (int) max(1, $minutesToRead);
         });
-        
+
     }
 }

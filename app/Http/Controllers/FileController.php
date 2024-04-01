@@ -3,11 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
+
+    public function upload(Request $request)
+    {
+
+        $request->apiValidate([
+            'file' => 'file|required',
+            'section' => 'nullable'
+        ]);
+        $file = $request->file('file');
+
+
+        $name = Str::random(10) . '-' . Carbon::now() . '.' . $file->guessClientExtension();
+        //  Storage::put('blogs/' . $name, file_get_contents($file));
+        $path = $file->storeAs('blogs', $name);
+
+        $file = File::create([
+            'path' => 'app/' . $path,
+            'extension' => $file->guessClientExtension(),
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'section' => $request->input('section')
+        ]);
+
+        return $this->createdResponse($file);
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -21,7 +49,7 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -45,7 +73,8 @@ class FileController extends Controller
      */
     public function destroy(File $file)
     {
-        //
+        $file->delete();
+        return $this->deletedResponse();
     }
 
     public function download(Request $request, File $file)

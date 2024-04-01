@@ -9,4 +9,8 @@ use  App\Traits\ApiResponseBuilderTrait ;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests,ApiResponseBuilderTrait;
+
+    public function __construct(){
+     //   sleep(5) ;
+    }
 }

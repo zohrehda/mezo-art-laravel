@@ -12,9 +12,11 @@ return new class extends Migration {
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->morphs('fileable');
+            $table->nullableMorphs('fileable');
             $table->text('path');
             $table->string('size');
+            $table->string('mime_type')->nullable();
+            $table->string('extension')->nullable();
             $table->string('section')->nullable();
             $table->timestamps();
             $table->softDeletes();

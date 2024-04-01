@@ -10,6 +10,9 @@ use App\Traits\ApiResponseBuilderTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\File;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -145,34 +148,94 @@ class AuthController extends Controller
 
     public function me()
     {
-        $user = auth()->user()->load('meta');
+        $user = auth()->user()->load(['meta', 'image']);
         return $this->retrieve($user);
     }
 
     public function updateMe(Request $request)
     {
-        //  dd($request->all());
-        $validator = $request->apiValidate([
-            'email' => 'sometimes',
-            'mobile' => 'sometimes',
-            'first_name' => 'sometimes',
-            'last_name' => 'sometimes',
-            'brith_date' => 'sometimes',
-            // 
-            'brand_name' => 'sometimes',
-            'phone_number' => 'sometimes',
-            'guild' => 'sometimes',
-            'province_id' => 'nullable|sometimes|exists:provinces,id',
-            'city_id' => 'nullable|sometimes|exists:cities,id',
-            'address' => 'sometimes',
-            'est_year' => 'date',
+        $validator = $request->apiValidate(
+            [
+                'email' => 'sometimes',
+                'mobile' => 'sometimes',
+                'first_name' => 'sometimes',
+                'last_name' => 'sometimes',
+                'brith_date' => 'sometimes|date|nullable',
+                // 
+                'brand_name' => 'sometimes',
+                'phone_number' => 'sometimes',
+                'guild' => 'sometimes',
+                'province_id' => 'nullable|sometimes|exists:provinces,id',
+                'city_id' => 'nullable|sometimes|exists:cities,id',
+                'address' => 'sometimes',
+                'est_year' => 'sometimes|date|nullable',
+                'current_password' => 'nullable',
+                'new_password' => 'nullable|confirmed|min:3',
+            ],
+            $request->all(),
+            function ($validator) use ($request) {
 
-        ]);
+                $validator->after(function ($validator) use ($request) {
+
+                    if ($request->filled('new_password') && auth()->user()->password && !Hash::check($request->input('current_password'), auth()->user()->password))
+                        $validator->errors()->add('current_password', 'رمز فعلی نادرست است');
+
+                });
+
+            }
+        );
 
 
-        auth()->user()->update($validator->validated());
+
+        $password_array = [];
+        if ($request->filled('new_password'))
+            if (
+                (auth()->user()->password && Hash::check($request->input('current_password'), auth()->user()->password))
+                || !auth()->user()->password
+
+            )
+                $password_array = ['password' => Hash::make($request->input('new_password'))];
+
+
+
+
+        auth()->user()->update(
+            $validator->validated() + $password_array
+        );
         auth()->user()->meta()->updateOrCreate(['user_id' => auth()->user()->id], $validator->validated());
         return $this->updatedResponse(auth()->user());
+    }
+
+    public function uploadImage(Request $request)
+    {
+        $request->apiValidate([
+            'file' => 'required|file'
+        ]);
+
+        $file = $request->file('file');
+        $name = Str::random(10) . '-' . Carbon::now() . '.' . $file->guessClientExtension();
+        $path = $file->storeAs('users', $name);
+        auth()->user()->image()->updateOrCreate(
+            [
+
+            ],
+            [
+                'path' => 'app/' . $path,
+                'extension' => $file->guessClientExtension(),
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType(),
+
+            ]
+        );
+        // $file = File::create([
+        //     'path' => 'app/' . $path,
+        //     'extension' => $file->guessClientExtension(),
+        //     'size' => $file->getSize(),
+        //     'mime_type' => $file->getMimeType(),
+        //     'section' => $request->input('section')
+        // ]);
+
+        return $this->response(trans('messages.uploaded', ['attribute' => 'عکس پروفایل شما']));
     }
 
 

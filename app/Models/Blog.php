@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
+use App\Models\Traits\Fileable;
 use App\Models\Traits\Filterable;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,20 +16,44 @@ use Illuminate\Support\Str;
 
 class Blog extends Model
 {
-    use HasFactory, Filterable;
+    use HasFactory, Filterable, Fileable;
     protected $fillable = [
         'title',
         'content',
         'slug',
         'category_id',
-        'author_id'
+        'author_id',
+        'status'
     ];
-    protected $appends = ['tag_ids', 'category_name', 'excerpt', 'create_date', 'read_time'];
+    protected $appends = ['tag_ids', 'category_name', 'excerpt', 'create_date', 'read_time', 'thumbnail_image', 'poster_image'];
     protected function tagIds(): Attribute
     {
         return new Attribute(
             get: fn() => $this->tags->pluck('id')
         );
+    }
+    protected function thumbnailImage(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->thumbnail->link ?? ''
+        );
+    }
+    protected function posterImage(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->poster->link ?? ''
+        );
+    }
+    public function thumbnail()
+    {
+        // return $this->files() ;
+        return $this->morphOne(File::class, 'fileable')->where('section', 'thumbnail');
+    }
+
+    public function poster()
+    {
+        // return $this->files() ;
+        return $this->morphOne(File::class, 'fileable')->where('section', 'poster');
     }
 
     protected function categoryName(): Attribute
@@ -82,6 +108,18 @@ class Blog extends Model
         $search = request()->input('search');
         if ($search)
             $query->where('title', 'like', "%$search%")->orWhere('content', 'like', "%$search%");
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('access', function (Builder $builder) {
+            $user = request()->user('sanctum');
+
+            if ($user && $user->role == UserRole::ADMIN->value)
+                return $builder;
+            else
+                $builder->where('status', true);
+        });
     }
 
 
