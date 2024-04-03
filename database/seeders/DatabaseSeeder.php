@@ -14,18 +14,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-    //    dd(Hash::make('password')) ;
-        User::factory()->create();
+        //    dd(Hash::make('password')) ;
+        User::factory()->create([
+            'first_name' => 'محسن',
+            'last_name' => 'مشفق',
+            'mobile' => '09123908699',
+            'role' => 'admin',
+            'email' => ''
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'زهره',
+            'last_name' => 'ٔدائیان',
+            'email' => 'daeian.zohreh@gmail.com',
+            'mobile' => '09386376960',
+            'role' => 'admin'
+        ]);
+
+
 
         $this->call([
             ProvinceSeeder::class,
             CitySeeder::class,
-            CategorySeeder::class,
-            TagSeeder::class,
-            DesignSeeder::class,
+                //   CategorySeeder::class,
+                //   TagSeeder::class,
             PaletteSeeder::class,
-            TicketSeeder::class,
-            BlogSeeder::class
+            //  TicketSeeder::class,
+            //  BlogSeeder::class ,
+            //   DesignSeeder::class,
         ]);
 
         // \App\Models\User::factory()->create([
