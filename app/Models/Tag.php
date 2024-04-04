@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
-    use HasFactory,Filterable;
+    use HasFactory, Filterable;
+    protected $fillable = [
+        'name'
+    ];
 }

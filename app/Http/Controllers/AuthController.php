@@ -25,6 +25,7 @@ class AuthController extends Controller
 
     public function __construct(Request $request)
     {
+
         $username = $request->username;
 
         $this->username = $username;

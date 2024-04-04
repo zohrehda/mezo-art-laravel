@@ -36,7 +36,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return $this->retrieve($category);
     }
 
     /**
@@ -44,7 +44,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $validator = $request->apiValidate([
+            'name' => 'sometimes',
+            'type' => 'nullable|in:blog,design',
+            'parent_id' => 'nullable|exists:categories,id',
+        ]);
+        $category = $category->update($validator->validated());
+        return $this->updatedResponse($category);
     }
 
     /**
@@ -52,6 +58,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return $this->deletedResponse();
     }
 }

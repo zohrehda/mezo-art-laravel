@@ -12,8 +12,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags=Tag::filter()->get() ;
-        return $this->retrieve($tags) ;
+        $tags = Tag::filter()->get();
+        return $this->retrieve($tags);
     }
 
     /**
@@ -21,7 +21,11 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->apiValidate([
+            'name' => 'required'
+        ]);
+        $tag = Tag::create($validator->validated());
+        return $this->createdResponse($tag);
     }
 
     /**
@@ -29,7 +33,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        return $this->retrieve($tag->loady());
     }
 
     /**
@@ -37,7 +41,11 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        //
+        $validator = $request->apiValidate([
+            'name' => 'sometimes'
+        ]);
+        $tag = $tag->update($validator->validated());
+        return $this->updatedResponse($tag);
     }
 
     /**
@@ -45,6 +53,7 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return $this->deletedResponse();
     }
 }

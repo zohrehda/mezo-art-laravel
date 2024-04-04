@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use  App\Traits\ApiResponseBuilderTrait ;
+use App\Traits\ApiResponseBuilderTrait;
+
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests,ApiResponseBuilderTrait;
+    use AuthorizesRequests, ValidatesRequests, ApiResponseBuilderTrait;
 
-    public function __construct(){
-     //   sleep(5) ;
+    public function __construct()
+    {
+        //  sleep(10);
     }
 }
