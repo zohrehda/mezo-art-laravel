@@ -50,6 +50,7 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (Throwable $e) {
 
+            dd($e) ;
             $status_code = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
                 return $this->response($e->getMessage(), [], $status_code);
         });

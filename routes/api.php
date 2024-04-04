@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\PaletteController;
 use App\Http\Controllers\PrintCartController;
 use App\Http\Controllers\ProvinceController;
@@ -67,4 +68,6 @@ Route::get('/subscribe', [SubscriberController::class, 'index'])->middleware('au
 Route::get('/subscribe/{hash}', [SubscriberController::class, 'verify'])->name('subscribe.confirm');
 Route::post('/upload', [FileController::class, 'upload'])->name('files.upload');
 Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
+Route::apiResource('/page_builders', PageBuilderController::class)->middleware('auth:sanctum');
 
+    

@@ -59,7 +59,7 @@ class Blog extends Model
     protected function categoryName(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->category->name
+            get: fn() => $this->category->name??''
         );
     }
     protected function excerpt(): Attribute
