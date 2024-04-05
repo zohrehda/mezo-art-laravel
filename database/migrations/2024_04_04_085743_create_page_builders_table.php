@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('page_builders', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->longText('content');
+            $table->longText('content')->nullable();
             $table->timestamps();
         });
     }

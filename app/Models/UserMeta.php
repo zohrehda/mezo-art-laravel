@@ -17,4 +17,14 @@ class UserMeta extends Model
         'est_year',
         'phone_number'
     ];
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

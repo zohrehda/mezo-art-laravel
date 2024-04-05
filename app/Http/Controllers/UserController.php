@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    protected $repository = '';
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->repository = $userRepository;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -32,6 +38,7 @@ class UserController extends Controller
             'username' => 'string|unique:users,username',
             'password' => '',
             'role' => '',
+            'is_ban' => 'boolean'
         ]);
 
         $user = User::create($validator->validated() + ['password' => $request->password ? Hash::make($request->password) : null]);
@@ -54,7 +61,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $user = $this->repository->update($request, $user);
+        return $this->updatedResponse($user);
     }
 
     /**

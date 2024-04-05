@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,Filterable;
+    use HasApiTokens, HasFactory, Notifiable, Filterable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +29,7 @@ class User extends Authenticatable
         'password',
         'role',
         'last_login_at',
+        'is_ban'
 
     ];
 
@@ -47,7 +48,11 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'profile' ,'has_password'
+        'profile',
+        'has_password',
+        'city' ,
+        'province' ,
+       
     ];
 
     /**
@@ -71,6 +76,20 @@ class User extends Authenticatable
         );
     }
 
+    protected function city(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->meta->city->name ?? ''
+        );
+    }
+
+    protected function province(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->meta->province->name ?? ''
+        );
+    }
+
     protected function hasPassword(): Attribute
     {
         return new Attribute(
@@ -82,6 +101,8 @@ class User extends Authenticatable
     {
         return $this->morphOne(File::class, 'fileable');
     }
+
+
 
     // protected $appends = ['fullName'];
     // protected function fullName(): Attribute

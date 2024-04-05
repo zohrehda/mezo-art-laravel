@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->timestamp('mobile_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->timestamp('last_login_at')->nullable();
+            $table->boolean('is_ban')->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

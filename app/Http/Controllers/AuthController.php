@@ -44,6 +44,7 @@ class AuthController extends Controller
         })->first();
 
         $this->user = $user;
+
     }
 
     public function authenticate(Request $request)
@@ -52,6 +53,9 @@ class AuthController extends Controller
             'username' => ['required', 'regex:/^(09[0-9]{9})|(\w+@\w+\.\w{2,3})$/'],
         ]);
 
+        if ($this->user->is_ban) {
+            return $this->response('کاربر اجازه ورود ندارد', [], 403);
+        }
 
         if (!$this->user) {
 
