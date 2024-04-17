@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('design_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('design_id');
-            $table->string('original_file_path');
+            $table->string('original_file_path')->nullable();
             $table->string('fake_file_path');
             $table->string('size')->nullable();
             $table->bigInteger('dpi')->nullable();

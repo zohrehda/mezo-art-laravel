@@ -36,12 +36,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProvinceSeeder::class,
             CitySeeder::class,
-                //   CategorySeeder::class,
-                //   TagSeeder::class,
+                //    CategorySeeder::class,
+                //      TagSeeder::class,
             PaletteSeeder::class,
             //  TicketSeeder::class,
             //  BlogSeeder::class ,
-            //   DesignSeeder::class,
+            //       DesignSeeder::class,
         ]);
 
         // \App\Models\User::factory()->create([
