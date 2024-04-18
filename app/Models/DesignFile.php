@@ -20,21 +20,28 @@ class DesignFile extends Model
         'original_file_path',
         'fake_file_path',
         'size',
+        'code',
         'dpi',
         'mime_type',
+        'width',
+        'height',
         'extension'
     ];
     protected $appends = ['link', 'is_in_print_cart'];
 
     public function design()
     {
-        return $this->belongsTo(Design::class) ;
+        return $this->belongsTo(Design::class);
     }
 
     protected function link(): Attribute
     {
+        //  return storage_path($this->fake_file_path);
+
         return Attribute::make(
-            get: fn($value) => route('files.download', $this),
+            // get: fn($value) => route('files.download', $this),
+            get: fn($value) => storage_path($this->fake_file_path),
+
         );
     }
 
