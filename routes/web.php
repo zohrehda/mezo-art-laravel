@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\DesignFileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,4 @@ Route::get('/', function () {
 });
 
 Route::get('files/{file}', [FileController::class, 'download'])->withoutMiddleware('')->name('files.download');
+Route::get('design_files/{designFile}', [DesignFileController::class, 'download'])->withoutMiddleware('')->name('design_files.download');

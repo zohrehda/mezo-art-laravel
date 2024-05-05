@@ -88,7 +88,8 @@ class DesignCotroller extends Controller
      */
     public function destroy(Design $design)
     {
-        //
+        $design->delete();
+        return $this->deletedResponse();
     }
 
     public function downloadFiles(Design $design)

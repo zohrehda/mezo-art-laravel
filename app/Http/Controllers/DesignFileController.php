@@ -43,7 +43,7 @@ class DesignFileController extends Controller
 
         ]);
 
-        return $this->response(trans('messages.uploaded', ['attribute']));
+        return $this->response(trans('messages.uploaded', ['attribute']), $design_file);
 
     }
 
@@ -74,6 +74,7 @@ class DesignFileController extends Controller
 
     public function download(Request $request, DesignFile $designFile)
     {
+      //  dd($designFile->fake_file_path) ;
         return response()->file(storage_path($designFile->fake_file_path));
     }
 

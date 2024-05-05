@@ -39,8 +39,8 @@ class DesignFile extends Model
         //  return storage_path($this->fake_file_path);
 
         return Attribute::make(
-            // get: fn($value) => route('files.download', $this),
-            get: fn($value) => storage_path($this->fake_file_path),
+            get: fn($value) => route('design_files.download', $this),
+            // get: fn($value) => storage_path($this->fake_file_path),
 
         );
     }

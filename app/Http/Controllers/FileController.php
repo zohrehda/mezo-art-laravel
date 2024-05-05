@@ -30,7 +30,9 @@ class FileController extends Controller
             'extension' => $file->guessClientExtension(),
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
-            'section' => $request->input('section')
+            'section' => $request->input('section'),
+            'fileable_id' => $request->input('fileable_id'),
+            'fileable_type' => modelResolve($request->fileable_type),
         ]);
 
         return $this->createdResponse($file);
