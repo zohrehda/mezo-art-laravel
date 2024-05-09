@@ -12,8 +12,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::filter()->get();
-        return $this->retrieve($tags);
+        return Tag::filter()->paginate22();
+      
     }
 
     /**
