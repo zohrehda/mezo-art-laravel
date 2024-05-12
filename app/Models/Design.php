@@ -64,17 +64,7 @@ class Design extends Model
         );
     }
 
-    protected function PrintTypeFa(): Attribute
-    {
-        return new Attribute(
 
-            get: fn($value) => match ($value) {
-                DesignPrintType::SUB => 'سابلیمیشن',
-                DesignPrintType::DTF => 'دی تی اف',
-
-            }
-        );
-    }
 
     public function jsonSerialize(): mixed
     {
@@ -91,7 +81,7 @@ class Design extends Model
     public function scopeModelFilter($query)
     {
         $search = request()->input('search');
-       // $query->where()
+        // $query->where()
     }
 
 

@@ -91,14 +91,15 @@ class BlogController extends Controller
             'poster_id' => 'nullable|exists:files,id',
         ]);
 
+
+
         $blog = DB::transaction(function () use ($validator, $request, $blog) {
             $blog->update($validator->validated() + ['slug' => Str::slug($request->title)]);
 
             if ($request->tag_ids)
                 $blog->tags()->sync($request->tag_ids);
 
-
-            if ($request->filled('thumbnail_id'))
+            if ($request->has('thumbnail_id'))
                 File::find($request->input('thumbnail_id'))->update(
                     [
                         'section' => 'thumbnail',

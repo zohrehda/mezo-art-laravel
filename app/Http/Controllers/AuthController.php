@@ -213,6 +213,7 @@ class AuthController extends Controller
 
     public function uploadImage(Request $request)
     {
+
         $request->apiValidate([
             'file' => 'required|file'
         ]);

@@ -7,6 +7,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\PaletteController;
 use App\Http\Controllers\PrintCartController;
+use App\Http\Controllers\PrintOrderController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TicketController;
@@ -70,4 +71,5 @@ Route::post('/upload', [FileController::class, 'upload'])->name('files.upload');
 Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
 Route::apiResource('/page_builders', PageBuilderController::class)->middleware('auth:sanctum');
 
-    
+Route::apiResource('/print_orders', PrintOrderController::class)->middleware('auth:sanctum');
+

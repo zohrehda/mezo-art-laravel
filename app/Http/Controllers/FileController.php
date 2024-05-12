@@ -14,6 +14,8 @@ class FileController extends Controller
     public function upload(Request $request)
     {
 
+        // dd($request->all());
+
         $request->apiValidate([
             'file' => 'file|required',
             'section' => 'nullable'

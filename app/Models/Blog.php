@@ -53,13 +53,15 @@ class Blog extends Model
     public function poster()
     {
         // return $this->files() ;
-        return $this->morphOne(File::class, 'fileable')->where('section', 'poster');
+        return $this->morphOne(File::class, 'fileable')->where('section', 'poster')
+
+        ;
     }
 
     protected function categoryName(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->category->name??''
+            get: fn() => $this->category->name ?? ''
         );
     }
     protected function excerpt(): Attribute
