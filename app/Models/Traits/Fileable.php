@@ -8,7 +8,7 @@ trait Fileable
 {
     public function files()
     {
-        return $this->morphMany(File::class,'fileable');
-        
+        return $this->morphToMany(File::class, 'fileable', 'fileables')->withPivot(['section']);
+    //    return $this->morphMany(File::class, 'fileable');
     }
 }

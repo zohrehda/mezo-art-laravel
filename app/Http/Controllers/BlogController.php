@@ -46,22 +46,9 @@ class BlogController extends Controller
             $blog = Blog::create($validator->validated() + ['slug' => Str::slug($request->title), 'author_id' => auth()->user()->id]);
             $blog->tags()->sync($request->tag_ids);
 
-            if ($request->filled('thumbnail_id'))
-                File::find($request->input('thumbnail_id'))->update(
-                    [
-                        'section' => 'thumbnail',
-                        'fileable_type' => Blog::class,
-                        'fileable_id' => $blog->id
-                    ]
-                );
-            if ($request->filled('poster_id'))
-                File::find($request->input('poster_id'))->update(
-                    [
-                        'section' => 'poster',
-                        'fileable_type' => Blog::class,
-                        'fileable_id' => $blog->id
-                    ]
-                );
+            $blog->poster()->sync($request->poster_id ? [$request->poster_id] : []);
+            $blog->thumbnail()->sync($request->thumbnail_id ? [$request->thumbnail_id] : []);
+
             return $blog;
         });
         return $this->createdResponse($blog);
@@ -99,23 +86,9 @@ class BlogController extends Controller
             if ($request->tag_ids)
                 $blog->tags()->sync($request->tag_ids);
 
-            if ($request->has('thumbnail_id'))
-                File::find($request->input('thumbnail_id'))->update(
-                    [
-                        'section' => 'thumbnail',
-                        'fileable_type' => Blog::class,
-                        'fileable_id' => $blog->id
-                    ]
-                );
+            $blog->poster()->sync($request->poster_id ? [$request->poster_id] : []);
+            $blog->thumbnail()->sync($request->thumbnail_id ? [$request->thumbnail_id] : []);
 
-            if ($request->filled('poster_id'))
-                File::find($request->input('poster_id'))->update(
-                    [
-                        'section' => 'poster',
-                        'fileable_type' => Blog::class,
-                        'fileable_id' => $blog->id
-                    ]
-                );
 
             return $blog->refresh();
 

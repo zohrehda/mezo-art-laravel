@@ -35,27 +35,27 @@ class Blog extends Model
     protected function thumbnailImage(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->thumbnail->link ?? ''
+            get: fn() => $this->thumbnail[0]->link ?? ''
         );
     }
     protected function posterImage(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->poster->link ?? ''
+            get: fn() => $this->poster[0]->link ?? ''
         );
     }
     public function thumbnail()
     {
+        return $this->files()->withPivotValue('section', 'thumbnail');
+
         // return $this->files() ;
         return $this->morphOne(File::class, 'fileable')->where('section', 'thumbnail');
     }
 
     public function poster()
     {
-        // return $this->files() ;
-        return $this->morphOne(File::class, 'fileable')->where('section', 'poster')
-
-        ;
+        return $this->files()->withPivotValue('section', 'poster');
+        return $this->morphOne(File::class, 'fileable')->where('section', 'poster');
     }
 
     protected function categoryName(): Attribute
