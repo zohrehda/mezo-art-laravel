@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\UserRole;
 use App\Models\Traits\Fileable;
 use App\Models\Traits\Filterable;
+use App\Models\Traits\Routeable;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,14 +17,16 @@ use Illuminate\Support\Str;
 
 class Blog extends Model
 {
-    use HasFactory, Filterable, Fileable;
+    use HasFactory, Filterable, Fileable, Routeable;
     protected $fillable = [
         'title',
         'content',
         'slug',
         'category_id',
         'author_id',
-        'status'
+        'status',
+        'meta_title',
+        'meta_description'
     ];
     protected $appends = ['tag_ids', 'category_name', 'excerpt', 'create_date', 'read_time', 'thumbnail_image', 'poster_image'];
     protected function tagIds(): Attribute

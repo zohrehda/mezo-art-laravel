@@ -40,6 +40,8 @@ class BlogController extends Controller
             'tag_ids' => 'array',
             'thumbnail_id' => 'nullable|exists:files,id',
             'poster_id' => 'nullable|exists:files,id',
+            'meta_description' => 'string|max:200',
+            'meta_title' => 'string|max:200'
         ]);
         $blog = DB::transaction(function () use ($validator, $request) {
 
