@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\UserRole;
 use App\Models\Traits\Fileable;
 use App\Models\Traits\Filterable;
+use App\Models\Traits\Likeable;
 use App\Models\Traits\Routeable;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,7 +18,7 @@ use Illuminate\Support\Str;
 
 class Blog extends Model
 {
-    use HasFactory, Filterable, Fileable, Routeable;
+    use HasFactory, Filterable, Fileable, Routeable, Likeable;
     protected $fillable = [
         'title',
         'content',
@@ -29,6 +30,14 @@ class Blog extends Model
         'meta_description'
     ];
     protected $appends = ['tag_ids', 'category_name', 'excerpt', 'create_date', 'read_time', 'thumbnail_image', 'poster_image'];
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            ...$this->toArray(),
+            'like_count' => $this->likeCount()
+        ];
+    }
     protected function tagIds(): Attribute
     {
         return new Attribute(
@@ -69,8 +78,10 @@ class Blog extends Model
     }
     protected function excerpt(): Attribute
     {
+
         return new Attribute(
-            get: fn() => Str::words($this->content, 3000)
+            // get: fn() => Str::words($this->content, 1)
+            get: fn() => Str::limit($this->content, 10, '...')
         );
     }
 
