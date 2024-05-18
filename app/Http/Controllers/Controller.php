@@ -13,6 +13,6 @@ class Controller extends BaseController
 
     public function __construct()
     {
-          sleep(1);
+       //   sleep(1);
     }
 }
