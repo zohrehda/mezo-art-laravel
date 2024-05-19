@@ -150,6 +150,8 @@ class Blog extends Model
         });
         
         static::updating(function ($model) {
+           // dd($model->title);
+            dd(Str::slug($model->title,'-',null)) ;
             $model->fill([
                 'slug' => Str::slug($model->title)
             ]);
