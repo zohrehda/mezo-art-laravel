@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('category_id');
             $table->string('title');
-            $table->longText('slug');
+            $table->longText('content');
+            $table->string('slug');
             $table->string('meta_title')->nullable();
             $table->longText('meta_description')->nullable();
             $table->foreignId('author_id');
