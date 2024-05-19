@@ -145,15 +145,13 @@ class Blog extends Model
         parent::boot();
         static::creating(function ($model) {
             $model->fill([
-                'slug' => Str::slug($model->title)
+                'slug' => Str::slug($model->title, '-', null)
             ]);
         });
-        
+
         static::updating(function ($model) {
-           // dd($model->title);
-            dd(Str::slug($model->title,'-',null)) ;
             $model->fill([
-                'slug' => Str::slug($model->title)
+                'slug' => Str::slug($model->title, '-', null)
             ]);
         });
     }
