@@ -88,6 +88,7 @@ class BlogController extends Controller
             if ($request->tag_ids)
                 $blog->tags()->sync($request->tag_ids);
 
+                
             if ($request->has('poster_id'))
                 $blog->poster()->sync($request->poster_id ? [$request->poster_id] : []);
 
