@@ -56,6 +56,8 @@ class Blog extends Model
             get: fn() => $this->poster[0]->link ?? ''
         );
     }
+
+
     public function thumbnail()
     {
         return $this->files()->withPivotValue('section', 'thumbnail');
@@ -137,6 +139,24 @@ class Blog extends Model
                 $builder->where('status', true);
         });
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->fill([
+                'slug' => Str::slug($model->title)
+            ]);
+        });
+        
+        static::updating(function ($model) {
+            $model->fill([
+                'slug' => Str::slug($model->title)
+            ]);
+        });
+    }
+
+
 
 
 }

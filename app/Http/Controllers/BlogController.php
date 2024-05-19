@@ -45,7 +45,7 @@ class BlogController extends Controller
         ]);
         $blog = DB::transaction(function () use ($validator, $request) {
 
-            $blog = Blog::create($validator->validated() + ['slug' => Str::slug($request->title), 'author_id' => auth()->user()->id]);
+            $blog = Blog::create($validator->validated() + ['author_id' => auth()->user()->id]);
             $blog->tags()->sync($request->tag_ids);
 
             $blog->poster()->sync($request->poster_id ? [$request->poster_id] : []);
@@ -83,13 +83,16 @@ class BlogController extends Controller
 
 
         $blog = DB::transaction(function () use ($validator, $request, $blog) {
-            $blog->update($validator->validated() + ['slug' => Str::slug($request->title)]);
+            $blog->update($validator->validated());
 
             if ($request->tag_ids)
                 $blog->tags()->sync($request->tag_ids);
 
-            $blog->poster()->sync($request->poster_id ? [$request->poster_id] : []);
-            $blog->thumbnail()->sync($request->thumbnail_id ? [$request->thumbnail_id] : []);
+            if ($request->has('poster_id'))
+                $blog->poster()->sync($request->poster_id ? [$request->poster_id] : []);
+
+            if ($request->has('thumbnail_id'))
+                $blog->thumbnail()->sync($request->thumbnail_id ? [$request->thumbnail_id] : []);
 
 
             return $blog->refresh();
