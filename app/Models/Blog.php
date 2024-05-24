@@ -83,7 +83,7 @@ class Blog extends Model
 
         return new Attribute(
             // get: fn() => Str::words($this->content, 1)
-            get: fn() => Str::limit(strip_tags($this->content), 400, '...')
+            get: fn() => Str::limit(strip_tags($this->content), 150, '...')
         );
     }
 
