@@ -12,6 +12,7 @@ class TagController extends Controller
      */
     public function index()
     {
+       // return Tag::find(1)->blogs()->get() ;
         return Tag::filter()->paginate22();
       
     }

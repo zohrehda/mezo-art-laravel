@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
                 //    CategorySeeder::class,
                 //      TagSeeder::class,
             PaletteSeeder::class,
+            RouteSeeder::class
             //  TicketSeeder::class,
             //  BlogSeeder::class ,
             //       DesignSeeder::class,

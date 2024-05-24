@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
@@ -12,11 +13,30 @@ class Category extends Model
     protected $fillable = [
         'name',
         'parent_id',
-        'type'
+        'type',
+        'slug'
     ];
 
     public function children()
     {
         return $this->hasMany(self::class, 'parent_id')->with('children');
+    }
+
+
+    protected static function boot()
+    {
+
+        parent::boot();
+        static::creating(function ($model) {
+            $model->fill([
+                'slug' => Str::slug($model->name, '-', null)
+            ]);
+        });
+
+        static::updating(function ($model) {
+            $model->fill([
+                'slug' => Str::slug($model->name, '-', null)
+            ]);
+        });
     }
 }
