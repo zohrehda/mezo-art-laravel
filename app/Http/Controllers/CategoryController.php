@@ -26,6 +26,7 @@ class CategoryController extends Controller
             'name' => 'required',
             'type' => 'nullable|in:blog,design',
             'parent_id' => 'nullable|exists:categories,id',
+            'color' => 'sometimes'
         ]);
         $category = Category::create($validator->validated());
         return $this->createdResponse($category);
@@ -48,6 +49,7 @@ class CategoryController extends Controller
             'name' => 'sometimes',
             'type' => 'nullable|in:blog,design',
             'parent_id' => 'nullable|exists:categories,id',
+            'color' => 'sometimes'
         ]);
         $category = $category->update($validator->validated());
         return $this->updatedResponse($category);

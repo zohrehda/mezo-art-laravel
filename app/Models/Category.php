@@ -14,7 +14,8 @@ class Category extends Model
         'name',
         'parent_id',
         'type',
-        'slug'
+        'slug' ,
+        'color'
     ];
 
     public function children()

@@ -27,7 +27,8 @@ class Blog extends Model
         'author_id',
         'status',
         'meta_title',
-        'meta_description'
+        'meta_description',
+        'color'
     ];
     protected $appends = ['tag_ids', 'category_name', 'excerpt', 'create_date', 'read_time', 'thumbnail_image', 'poster_image'];
 

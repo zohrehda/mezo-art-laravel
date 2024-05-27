@@ -14,6 +14,7 @@ class DesignCotroller extends Controller
     public function index()
     {
         // dd(request()->all());
+       return Design::all();
         return Design::filter()->paginate22();
     }
 
