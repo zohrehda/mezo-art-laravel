@@ -35,7 +35,7 @@ class Design extends Model
 
     public function siteFiles()
     {
-        return $this->files()->where('section', 'site');
+        return $this->files()->where('fileables.section', 'site');
     }
 
     public function printFiles()
