@@ -30,13 +30,14 @@ class Blog extends Model
         'meta_description',
         'color'
     ];
-    protected $appends = ['tag_ids', 'category_name', 'excerpt', 'create_date', 'read_time', 'thumbnail_image', 'poster_image'];
+    protected $appends = ['tag_ids', 'category_name', 'category_color', 'excerpt', 'create_date', 'read_time', 'thumbnail_image', 'poster_image'];
 
     public function jsonSerialize(): mixed
     {
         return [
             ...$this->toArray(),
-            'like_count' => $this->likeCount()
+            'like_count' => $this->likeCount(),
+
         ];
     }
     protected function tagIds(): Attribute
@@ -77,6 +78,12 @@ class Blog extends Model
     {
         return new Attribute(
             get: fn() => $this->category->name ?? ''
+        );
+    }
+    protected function categoryColor(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->category->color ?? ''
         );
     }
     protected function excerpt(): Attribute

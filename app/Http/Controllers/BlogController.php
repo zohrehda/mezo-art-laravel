@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\File;
+use App\Models\Views\BlogView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,7 @@ class BlogController extends Controller
      */
     public function index()
     {
+      //  return BlogView::all(); 
         return Blog::filter()->withCount('comments')->paginate22();
     }
 
