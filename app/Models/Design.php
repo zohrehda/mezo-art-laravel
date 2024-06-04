@@ -28,10 +28,15 @@ class Design extends Model
         'category_id',
         'colors',
         'pinterest_link',
+        'colored_fabric',
     ];
 
     protected $appends = ['tag_ids'];
     protected $attributes = ['downloadable' => 1, 'code' => 33];
+    protected $casts = [
+        'colors' => 'array' ,
+        'colored_fabric'=>'boolean'
+    ];
 
     public function siteFiles()
     {
@@ -55,14 +60,17 @@ class Design extends Model
         );
     }
 
-    protected function colors(): Attribute
-    {
-        return new Attribute(
-            set: fn($value) => json_encode($value),
-            get: fn($value) => Palette::whereIn('id', json_decode($value, true) ?? [])->get()->toArray(),
 
-        );
-    }
+
+    // protected function colors(): Attribute
+    // {
+
+    //     return new Attribute(
+    //         set: fn($value) => json_encode($value),
+    //         get: fn($value) => Palette::whereIn('id', json_decode($value, true) ?? [])->get()->toArray(),
+
+    //     );
+    // }
 
 
 

@@ -40,8 +40,8 @@ class DesignFileController extends Controller
             'mime_type' => $file->getMimeType(),
             'width' => getimagesize($file)[0] ?? null,
             'height' => getimagesize($file)[0] ?? null,
-
         ]);
+        
 
         return $this->response(trans('messages.uploaded', ['attribute']), $design_file);
 

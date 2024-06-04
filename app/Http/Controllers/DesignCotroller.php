@@ -14,7 +14,7 @@ class DesignCotroller extends Controller
     public function index()
     {
         // dd(request()->all());
-       return Design::all();
+        //   return Design::all();
         return Design::filter()->paginate22();
     }
 
@@ -29,6 +29,7 @@ class DesignCotroller extends Controller
             'design_type' => 'required',
             'downloadable' => 'boolean',
             'private' => 'required|boolean',
+            'colored_fabric' => 'required|boolean',
             'designer_id' => 'required|exists:users,id',
             'package' => 'required',
             'category_id' => 'required|exists:categories,id',
@@ -63,6 +64,7 @@ class DesignCotroller extends Controller
             'design_type' => 'sometimes',
             'downloadable' => 'sometimes',
             'private' => 'sometimes|boolean',
+            'colored_fabric' => 'sometimes|boolean',
             'designer_id' => 'sometimes|exists:users,id',
             'package' => 'sometimes',
             'category_id' => 'nullable|exists:categories,id',

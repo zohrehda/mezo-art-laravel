@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
@@ -18,7 +18,9 @@ class FileController extends Controller
 
         $request->apiValidate([
             'file' => 'file|required',
-            'section' => 'nullable'
+            'section' => 'nullable',
+            'fileable_id' => 'sometimes',
+            'fileable_type' => 'sometimes',
         ]);
         $file = $request->file('file');
 
@@ -27,6 +29,7 @@ class FileController extends Controller
         //  Storage::put('blogs/' . $name, file_get_contents($file));
         $path = $file->storeAs('blogs', $name);
 
+        $model = modelResolve($request->fileable_type);
         $file = File::create([
             'path' => 'app/' . $path,
             'extension' => $file->guessClientExtension(),
@@ -34,7 +37,10 @@ class FileController extends Controller
             'mime_type' => $file->getMimeType(),
             'section' => $request->input('section'),
             'fileable_id' => $request->input('fileable_id'),
-            'fileable_type' => modelResolve($request->fileable_type),
+            'fileable_type' => $model,
+        ]);
+        $model::find($request->input('fileable_id'))->files()->attach([
+            $file->id => ['section' => $request->input('section')]
         ]);
 
         return $this->createdResponse($file);
@@ -75,9 +81,16 @@ class FileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(File $file)
+    public function destroy(Request $request, File $file)
     {
-        $file->delete();
+
+        DB::transaction(function () use ($request, $file) {
+            $model = modelResolve($request->fileable_type);
+            $model::find($request->input('fileable_id'))->files()->detach($file->id);
+            $file->delete();
+
+        });
+        
         return $this->deletedResponse();
     }
 
