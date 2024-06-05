@@ -14,7 +14,7 @@ class Category extends Model
         'name',
         'parent_id',
         'type',
-        'slug' ,
+        'slug',
         'color'
     ];
 
@@ -22,6 +22,12 @@ class Category extends Model
     {
         return $this->hasMany(self::class, 'parent_id')->with('children');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+    
 
 
     protected static function boot()
