@@ -15,20 +15,29 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         //    dd(Hash::make('password')) ;
-        User::factory()->create([
+        User::updateOrCreate([
+            'mobile' => '09123908699',
+        ], [
             'first_name' => 'محسن',
             'last_name' => 'مشفق',
             'mobile' => '09123908699',
             'role' => 'admin',
-            'email' => ''
+            'email' => '',
+            'password' => Hash::make('password'),
+
         ]);
 
-        User::factory()->create([
+        User::updateOrCreate([
+            'mobile' => '09386376960',
+
+        ], [
             'first_name' => 'زهره',
             'last_name' => 'ٔدائیان',
             'email' => 'daeian.zohreh@gmail.com',
             'mobile' => '09386376960',
-            'role' => 'admin'
+            'role' => 'admin',
+            'password' =>  Hash::make('password'),
+
         ]);
 
 

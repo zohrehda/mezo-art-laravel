@@ -39,9 +39,10 @@ class FileController extends Controller
             'fileable_id' => $request->input('fileable_id'),
             'fileable_type' => $model,
         ]);
-        $model::find($request->input('fileable_id'))->files()->attach([
-            $file->id => ['section' => $request->input('section')]
-        ]);
+        if ($request->filled('fileable_id') and $model)
+            $model::find($request->input('fileable_id'))->files()->attach([
+                $file->id => ['section' => $request->input('section')]
+            ]);
 
         return $this->createdResponse($file);
 
@@ -86,11 +87,12 @@ class FileController extends Controller
 
         DB::transaction(function () use ($request, $file) {
             $model = modelResolve($request->fileable_type);
-            $model::find($request->input('fileable_id'))->files()->detach($file->id);
+            if ($request->filled('fileable_id') and $model)
+                $model::find($request->input('fileable_id'))->files()->detach($file->id);
             $file->delete();
 
         });
-        
+
         return $this->deletedResponse();
     }
 

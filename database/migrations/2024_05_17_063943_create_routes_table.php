@@ -12,11 +12,13 @@ return new class extends Migration {
     {
         Schema::create('routes', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
+            $table->string('name');
+            $table->string('slug')->nullable();
             $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->string('redirect_code')->nullable();
             $table->string('redirect_url')->nullable();
+            $table->foreignId('page_builder_id')->nullable()->constrained('page_builders')->onUpdate('cascade') ;
             $table->timestamps();
         });
     }

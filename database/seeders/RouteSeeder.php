@@ -13,9 +13,10 @@ class RouteSeeder extends Seeder
      */
     public function run(): void
     {
-        Route::create([
-            'slug' => 'صفحه-ایندکس-مقالات',
-            'title' => 'صفحه ایندکس مقالات'
+        Route::insert([
+            ['name' => 'index'],
+            ['name' => 'blog_index'],
+            ['name' => 'about'],
         ]);
     }
 }

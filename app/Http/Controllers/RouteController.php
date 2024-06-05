@@ -12,7 +12,7 @@ class RouteController extends Controller
      */
     public function index()
     {
-        return $this->retrieve(Route::all());
+        return $this->retrieve(Route::filter()->get());
     }
 
     /**
@@ -39,6 +39,7 @@ class RouteController extends Controller
         $validator = $request->apiValidate([
             'slug' => 'sometimes',
             'title' => 'sometimes',
+            'page_builder_id' => 'sometimes',
             'description' => 'sometimes',
             'redirect_code' => 'sometimes',
             'redirect_url' => 'sometimes',
