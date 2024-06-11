@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Design;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -37,7 +38,7 @@ class DesignPolicy
      */
     public function update(User $user, Design $design): bool
     {
-        //
+        $user->role == UserRole::ADMIN->value || $design->designer_id == $user->id;
     }
 
     /**

@@ -19,6 +19,7 @@ class File extends Model
         'extension',
         'section',
         'mime_type',
+        'user_id'
     ];
     protected $appends = ['link', 'is_in_print_cart'];
 
@@ -34,6 +35,15 @@ class File extends Model
         return PrintCart::where('file_id', $this->id)->where('user_id', 1)->count() > 0;
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->fill([
+                'user_id' => request()->user('sanctum')->id ?? null
+            ]);
+        });
+    }
 
     // protected function isInPrintCart(): Attribute
     // { //  PrintCart::where('file_id', $this->id)->where('user_id', 1)->count() >0

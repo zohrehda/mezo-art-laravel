@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('mime_type')->nullable();
             $table->string('extension')->nullable();
             $table->string('section')->nullable();
+            $table->foreignId('user_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
