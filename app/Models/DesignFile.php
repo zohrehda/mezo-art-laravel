@@ -19,6 +19,7 @@ class DesignFile extends Model
         'design_id',
         'original_file_path',
         'fake_file_path',
+        'name',
         'size',
         'code',
         'dpi',
@@ -34,6 +35,8 @@ class DesignFile extends Model
         return $this->belongsTo(Design::class);
     }
 
+
+
     protected function link(): Attribute
     {
         //  return storage_path($this->fake_file_path);
@@ -43,6 +46,25 @@ class DesignFile extends Model
             // get: fn($value) => storage_path($this->fake_file_path),
 
         );
+    }
+
+    protected static function boot()
+    {
+
+        parent::boot();
+        // static::creating(function ($model) {
+        //     $print_file_name = $model->print_type == 'sub' ? ($model->design_type == 'single' ? 'SO' : 'ST') : 'DT';
+        //     $model->fill([
+        //         'code' => $print_file_name . rand(100000, 999999)
+        //     ]);
+        // });
+
+        // static::updating(function ($model) {
+        //     $print_file_name = $model->print_type == 'sub' ? ($model->design_type == 'single' ? 'SO' : 'ST') : 'DT';
+        //     $model->fill([
+        //         'code' => $print_file_name . substr($model->code, 2)
+        //     ]);
+        // });
     }
 
     protected function getIsInPrintCartAttribute(

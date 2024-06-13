@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Design;
 use App\Models\DesignFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -24,6 +25,7 @@ class DesignFileController extends Controller
     {
         $request->apiValidate([
             'file' => 'required|file',
+            'name' => 'required',
             'design_id' => 'required|exists:designs,id'
         ]);
         $file = $request->file('file');
@@ -31,17 +33,22 @@ class DesignFileController extends Controller
         $name = Str::random(10) . '-' . Carbon::now() . '.' . $file->guessClientExtension();
         $path = $file->storeAs('designs', $name);
 
+        $design = Design::find($request->design_id);
+
+
         $design_file = DesignFile::create([
             'design_id' => $request->design_id,
             'fake_file_path' => 'app/' . $path,
-            'code' => Str::random(10),
+            // 'code' => Str::random(10),
+            'code' => rand(100000, 999999),
+            'name' => $request->name,
             'extension' => $file->guessClientExtension(),
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
             'width' => getimagesize($file)[0] ?? null,
             'height' => getimagesize($file)[0] ?? null,
         ]);
-        
+
 
         return $this->response(trans('messages.uploaded', ['attribute']), $design_file);
 
@@ -60,7 +67,11 @@ class DesignFileController extends Controller
      */
     public function update(Request $request, DesignFile $designFile)
     {
-        //
+        $validator = $request->apiValidate([
+            'name' => 'sometimes',
+        ]);
+        $designFile->update($validator->validated());
+        return $this->retrieve($designFile);
     }
 
     /**
@@ -74,7 +85,7 @@ class DesignFileController extends Controller
 
     public function download(Request $request, DesignFile $designFile)
     {
-      //  dd($designFile->fake_file_path) ;
+        //  dd($designFile->fake_file_path) ;
         return response()->file(storage_path($designFile->fake_file_path));
     }
 

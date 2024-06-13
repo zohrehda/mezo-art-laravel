@@ -18,6 +18,7 @@ class Design extends Model
 
     protected $fillable = [
         'code',
+        'name',
         'print_type',
         'design_type',
         'downloadable',
@@ -34,8 +35,8 @@ class Design extends Model
     protected $appends = ['tag_ids'];
     protected $attributes = ['downloadable' => 1, 'code' => 33];
     protected $casts = [
-        'colors' => 'array' ,
-        'colored_fabric'=>'boolean'
+        'colors' => 'array',
+        'colored_fabric' => 'boolean'
     ];
 
     public function siteFiles()

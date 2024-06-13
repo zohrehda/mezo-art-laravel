@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('designs', function (Blueprint $table) {
             $table->id();
             $table->string('code');
+            $table->string('name')->nullable();
             $table->string('print_type');
             $table->string('design_type');
             $table->boolean('downloadable')->default(true);
@@ -23,7 +24,7 @@ return new class extends Migration {
             $table->foreignId('category_id')->nullable();
             $table->json('colors')->nullable();
             $table->boolean('colored_fabric')->default(0);
-         //   $table->json('fabric_colors')->nullable();
+            //   $table->json('fabric_colors')->nullable();
             $table->string('pinterest_link')->nullable();
             $table->timestamps();
             $table->softDeletes();
