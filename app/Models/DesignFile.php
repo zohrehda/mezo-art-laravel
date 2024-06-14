@@ -48,24 +48,7 @@ class DesignFile extends Model
         );
     }
 
-    protected static function boot()
-    {
-
-        parent::boot();
-        // static::creating(function ($model) {
-        //     $print_file_name = $model->print_type == 'sub' ? ($model->design_type == 'single' ? 'SO' : 'ST') : 'DT';
-        //     $model->fill([
-        //         'code' => $print_file_name . rand(100000, 999999)
-        //     ]);
-        // });
-
-        // static::updating(function ($model) {
-        //     $print_file_name = $model->print_type == 'sub' ? ($model->design_type == 'single' ? 'SO' : 'ST') : 'DT';
-        //     $model->fill([
-        //         'code' => $print_file_name . substr($model->code, 2)
-        //     ]);
-        // });
-    }
+   
 
     protected function getIsInPrintCartAttribute(
 

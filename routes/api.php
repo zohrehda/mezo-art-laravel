@@ -15,6 +15,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketMessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\AccessorySupplierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DesignCotroller;
@@ -77,3 +78,11 @@ Route::apiResource('/print_orders', PrintOrderController::class)->middleware('au
 Route::put('routes/{route}', [RouteController::class, 'update']);
 Route::get('routes', [RouteController::class, 'index']);
 Route::get('routes/{route}', [RouteController::class, 'show']);
+
+Route::apiResource('accessory_suppliers', AccessorySupplierController::class) ;
+
+Route::prefix('me')->group(function () {
+
+    Route::get('accessory_suppliers', [AccessorySupplierController::class, 'me']);
+
+})->middleware('auth:sanctum');

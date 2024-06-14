@@ -137,9 +137,9 @@ class AuthController extends Controller
 
         $token = $user->createToken('otp');
         $user->update(['last_login_at' => Carbon::now()]);
-        return [
+         return [
             'token' => $token->plainTextToken,
-            'user' => $user->refresh(),
+            'user' => $user->refresh()->load('meta'),
         ];
 
     }

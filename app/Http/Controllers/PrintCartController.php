@@ -35,10 +35,10 @@ class PrintCartController extends Controller
             //    dd($file);
             PrintCart::updateOrCreate([
                 'file_id' => $file,
-                'user_id' => 1
+                'user_id' => auth()->user()->id
             ], [
                 'file_id' => $file,
-                'user_id' => 1
+                'user_id' =>   auth()->user()->id
             ]);
         }
 
