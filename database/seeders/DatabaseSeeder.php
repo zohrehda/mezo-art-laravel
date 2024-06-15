@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         ], [
             'first_name' => 'محسن',
             'last_name' => 'مشفق',
-            'mobile' => '09123908699',
+            'mobile' => '09203908699',
             'role' => 'admin',
             'email' => '',
             'password' => Hash::make('password'),
