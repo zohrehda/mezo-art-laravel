@@ -70,6 +70,7 @@ Route::post('/subscribe', [SubscriberController::class, 'store']);
 Route::get('/subscribe', [SubscriberController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/subscribe/{hash}', [SubscriberController::class, 'verify'])->name('subscribe.confirm');
 Route::post('/upload', [FileController::class, 'upload'])->name('files.upload');
+Route::post('/editor_uploader', [FileController::class, 'editorUpload'])->name('files.uploader');
 Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
 Route::apiResource('/page_builders', PageBuilderController::class)->middleware('auth:sanctum');
 

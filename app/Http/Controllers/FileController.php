@@ -47,6 +47,47 @@ class FileController extends Controller
         return $this->createdResponse($file);
 
     }
+    public function editorUpload(Request $request)
+    {
+
+        // // dd($request->all());
+
+        // $request->apiValidate([
+        //     'file' => 'file|required',
+        //     'section' => 'nullable',
+        //     'fileable_id' => 'sometimes',
+        //     'fileable_type' => 'sometimes',
+        // ]);
+        $file = $request->file('upload');
+
+
+
+        $name = Str::random(10) . '-' . Carbon::now() . '.' . $file->guessClientExtension();
+        //  Storage::put('blogs/' . $name, file_get_contents($file));
+        $path = $file->storeAs('blogs', $name);
+
+        $model = modelResolve($request->fileable_type);
+
+        $file = File::create([
+            'path' => 'app/' . $path,
+            'extension' => $file->guessClientExtension(),
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'section' => $request->input('section'),
+            'fileable_id' => $request->input('fileable_id'),
+            'fileable_type' => $model,
+        ]);
+        if ($request->filled('fileable_id') and $model)
+            $model::find($request->input('fileable_id'))->files()->attach([
+                $file->id => ['section' => $request->input('section')]
+            ]);
+
+        return response()->json([
+
+            'url' => $file['link']
+        ]);
+
+    }
     /**
      * Display a listing of the resource.
      */
