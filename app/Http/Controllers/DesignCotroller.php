@@ -29,8 +29,10 @@ class DesignCotroller extends Controller
             'design_type' => 'required',
             'downloadable' => 'boolean',
             'private' => 'required|boolean',
+            'private_users' => 'array',
             'colored_fabric' => 'required|boolean',
             'designer_id' => 'required|exists:users,id',
+            'tag_ids' => 'array',
             'package' => 'required',
             'category_id' => 'required|exists:categories,id',
             'colors' => 'array',
@@ -39,7 +41,8 @@ class DesignCotroller extends Controller
         ]);
         $design = DB::transaction(function () use ($validator) {
             $design = Design::create($validator->validated());
-            // $design->tags()->sync($validator-)
+            $design->users()->sync($validator->validated()['private_users'] ?? []);
+            $design->tags()->sync($validator->validated()['tag_ids'] ?? []);
             return $design;
         });
         return $this->createdResponse($design);
@@ -64,21 +67,25 @@ class DesignCotroller extends Controller
             'design_type' => 'sometimes',
             'downloadable' => 'sometimes',
             'private' => 'sometimes|boolean',
+            'private_users' => 'sometimes|array',
             'colored_fabric' => 'sometimes|boolean',
             'designer_id' => 'sometimes|exists:users,id',
             'package' => 'sometimes',
             'category_id' => 'nullable|exists:categories,id',
             'colors' => 'array',
             'pinterest_link' => 'nullable',
-            'tag_ids' => 'array|sometimes',
+            'tag_ids' => 'array|sometimes|exists:tags,id',
             'tag_ids.*' => 'exists:tags,id',
 
         ]);
         $design = DB::transaction(function () use ($validator, $design, $request) {
             $design->update($validator->validated());
 
-            if ($request->filled('tag_ids'))
-                $design->tags()->sync($request->tag_ids);
+            // if ($request->filled('tag_ids'))
+            //     $design->tags()->sync($request->tag_ids);
+
+            $design->users()->sync($validator->validated()['private_users'] ?? []);
+            $design->tags()->sync($validator->validated()['tag_ids'] ?? []);
 
             return $design;
         });

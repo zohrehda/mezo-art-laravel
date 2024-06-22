@@ -54,6 +54,11 @@ class Design extends Model
         return $this->hasMany(AccessorySupplier::class, 'design_id');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'design_users', 'design_id', 'user_id');
+    }
+
     protected static function boot()
     {
 
