@@ -166,6 +166,10 @@ class PaletteSeeder extends Seeder
                 'name' => 'زیتونی',
                 'hex' => '#6C6A19'
             ],
+            [
+                'name' => 'سفید',
+                'hex' => '#FFFFFF'
+            ],
 
         ];
 
