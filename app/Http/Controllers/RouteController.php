@@ -56,6 +56,9 @@ class RouteController extends Controller
         if ($request->has('image3_id'))
             $route->files()->withPivotValue('section', 'image3')->sync($request->image3_id ? [$request->image3_id] : []);
 
+        if ($request->has('poster'))
+            $route->files()->withPivotValue('section', 'poster')->sync($request->poster ? [$request->poster] : []);
+
 
         $route->update($validator->validated());
 

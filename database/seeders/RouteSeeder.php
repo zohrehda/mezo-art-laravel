@@ -17,6 +17,7 @@ class RouteSeeder extends Seeder
             ['name' => 'index'],
             ['name' => 'blog_index'],
             ['name' => 'about'],
+            ['name' => 'blog_profile'],
         ]);
     }
 }
