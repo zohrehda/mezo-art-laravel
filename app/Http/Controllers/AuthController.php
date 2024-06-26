@@ -53,9 +53,6 @@ class AuthController extends Controller
             'username' => ['required', 'regex:/^(09[0-9]{9})|(\w+@\w+\.\w{2,3})$/'],
         ]);
 
-        if ($this->user->is_ban) {
-            return $this->response('کاربر اجازه ورود ندارد', [], 403);
-        }
 
         if (!$this->user) {
 
@@ -63,6 +60,8 @@ class AuthController extends Controller
                 'type' => $this->login_type,
                 'new' => true
             ], 200);
+        } elseif ($this->user->is_ban) {
+            return $this->response('کاربر اجازه ورود ندارد', [], 403);
         } else {
             return $this->response('success', [
                 'type' => $this->login_type,
@@ -137,7 +136,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('otp');
         $user->update(['last_login_at' => Carbon::now()]);
-         return [
+        return [
             'token' => $token->plainTextToken,
             'user' => $user->refresh()->load('meta'),
         ];
