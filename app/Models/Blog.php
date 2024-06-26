@@ -55,7 +55,8 @@ class Blog extends Model
     protected function posterImage(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->poster[0]->link ?? ''
+            //     get: fn() => $this->poster[0]->link ?? ''
+            get: fn() => Route::find(4)->files()->withPivotValue('section', 'poster')->first()->link
         );
     }
 
@@ -70,6 +71,7 @@ class Blog extends Model
 
     public function poster()
     {
+
         return $this->files()->withPivotValue('section', 'poster');
         return $this->morphOne(File::class, 'fileable')->where('section', 'poster');
     }
