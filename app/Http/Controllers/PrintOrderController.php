@@ -38,7 +38,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        //
+        return $this->retrieve($printOrder) ;
     }
 
     /**

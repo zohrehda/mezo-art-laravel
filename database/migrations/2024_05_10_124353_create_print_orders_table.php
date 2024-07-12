@@ -16,9 +16,16 @@ return new class extends Migration {
             $table->string('print_type');
             $table->string('design_type');
             $table->string('fabric_name')->nullable();
-            $table->string('fabric_type')->nullable();
+            $table->string('fabric_country_of_origin')->nullable();
+            $table->string('fabric_colorability')->nullable();
             $table->string('fabric_weight')->nullable();
+            $table->string('fabric_color')->nullable();
+            $table->string('fabric_shrink')->nullable();
             $table->string('fabric_material')->nullable();
+            $table->string('roll_type')->nullable();
+            $table->string('roll_shape')->nullable();
+
+            //   $table->string('fabric_type')->nullable();
             $table->string('status')->default('created'); //created, 
             $table->foreignId('updated_by')->nullable();
             $table->timestamps();

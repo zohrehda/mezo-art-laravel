@@ -35,7 +35,7 @@ class DesignFileController extends Controller
 
         $design = Design::find($request->design_id);
 
-
+        
         $design_file = DesignFile::create([
             'design_id' => $request->design_id,
             'fake_file_path' => 'app/' . $path,
@@ -46,7 +46,7 @@ class DesignFileController extends Controller
             'size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
             'width' => getimagesize($file)[0] ?? null,
-            'height' => getimagesize($file)[0] ?? null,
+            'height' => getimagesize($file)[1] ?? null,
         ]);
 
 

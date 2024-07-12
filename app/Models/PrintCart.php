@@ -25,6 +25,7 @@ class PrintCart extends Model
     public function jsonSerialize(): mixed
     {
         return [
+            ...$this->toArray(),
             'id' => $this->id,
             'print_type' => $this->design->print_type,
             'design_type' => $this->design->design_type,
