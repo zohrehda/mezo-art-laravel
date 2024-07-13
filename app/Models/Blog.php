@@ -56,7 +56,7 @@ class Blog extends Model
     {
         return new Attribute(
             //     get: fn() => $this->poster[0]->link ?? ''
-            get: fn() => Route::find(4)->files()->withPivotValue('section', 'poster')->first()->link
+            get: fn() => Route::find(4)->files()->withPivotValue('section', 'poster')->first()->link ?? ''
         );
     }
 
