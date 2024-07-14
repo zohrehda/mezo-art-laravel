@@ -118,8 +118,23 @@ class Design extends Model
 
     public function scopeModelFilter($query)
     {
-        $search = request()->input('search');
-        // $query->where()
+        $request=request() ;
+        $search = $request->input('search');
+
+        if($request->filled('search')){
+            $query->whereHas('tags',function($query) use($search) {
+             
+                $search_array=   array_filter(explode(' ',$search),function($item){
+                  
+                    return (strlen($item)>2 && $item ) ;
+                    
+                }) ;
+
+               // dd($search_array) ;
+                $query->where('name','like',"%$search%")->orWhere('name','in',$search_array) ;
+            }) ;
+        }
+        
     }
 
 
