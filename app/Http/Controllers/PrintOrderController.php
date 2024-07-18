@@ -15,7 +15,9 @@ class PrintOrderController extends Controller
      */
     public function index()
     {
-        return PrintOrder::filter()->paginate22();
+        return PrintOrder::filter()
+            ->where('user_id', auth()->user()->id)
+            ->paginate22();
     }
 
     /**
@@ -44,7 +46,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns','orderFiles.file'));
+        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file'));
     }
 
     /**
@@ -102,7 +104,7 @@ class PrintOrderController extends Controller
         }, $request->designs));
 
 
-        return $this->updatedResponse($printOrder->refresh()->load('patterns','orderFiles.file'));
+        return $this->updatedResponse($printOrder->refresh()->load('patterns', 'orderFiles.file'));
     }
 
     /**
