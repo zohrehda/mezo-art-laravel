@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\FabricMaterialController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\PaletteController;
 use App\Http\Controllers\PrintCartController;
@@ -83,9 +84,11 @@ Route::get('routes', [RouteController::class, 'index']);
 Route::get('routes/{route}', [RouteController::class, 'show']);
 
 Route::apiResource('accessory_suppliers', AccessorySupplierController::class) ;
+Route::apiResource('fabric_materials', FabricMaterialController::class) ;
 
-Route::prefix('me')->group(function () {
+Route::prefix('me')->middleware('auth:sanctum')->group(function () {
 
     Route::get('accessory_suppliers', [AccessorySupplierController::class, 'me']);
+    Route::get('print_orders', [PrintOrderController::class, 'me']);
 
-})->middleware('auth:sanctum');
+});

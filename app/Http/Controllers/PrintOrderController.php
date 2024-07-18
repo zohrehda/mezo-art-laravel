@@ -16,6 +16,12 @@ class PrintOrderController extends Controller
     public function index()
     {
         return PrintOrder::filter()
+            ->paginate22();
+    }
+
+    public function me()
+    {
+        return PrintOrder::filter()
             ->where('user_id', auth()->user()->id)
             ->paginate22();
     }
@@ -60,7 +66,7 @@ class PrintOrderController extends Controller
             'fabric_weight' => 'nullable',
             'fabric_color' => 'nullable',
             'fabric_shrink' => 'nullable',
-
+            'fabric_material_id' => 'nullable',
             'roll_condition' => 'nullable',
             'roll_shape' => 'nullable',
             'roll_size' => 'nullable',

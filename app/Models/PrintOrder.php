@@ -21,6 +21,7 @@ class PrintOrder extends Model
         'fabric_weight',
         'fabric_color',
         'fabric_shrink',
+        'fabric_material_id'
     ];
 
     public function user()
