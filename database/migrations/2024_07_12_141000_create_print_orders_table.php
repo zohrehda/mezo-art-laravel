@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('print_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->unsignedBigInteger('code');
             $table->string('print_type');
             $table->string('design_type');
             $table->string('fabric_name')->nullable();
@@ -22,8 +23,7 @@ return new class extends Migration {
             $table->string('fabric_color')->nullable();
             $table->string('fabric_shrink')->nullable();
             $table->string('fabric_material')->nullable();
-            $table->string('roll_type')->nullable();
-            $table->string('roll_shape')->nullable();
+         
 
             //   $table->string('fabric_type')->nullable();
             $table->string('status')->default('created'); //created, 

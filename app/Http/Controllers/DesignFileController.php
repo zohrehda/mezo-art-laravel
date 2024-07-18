@@ -34,8 +34,7 @@ class DesignFileController extends Controller
         $path = $file->storeAs('designs', $name);
 
         $design = Design::find($request->design_id);
-
-        
+ 
         $design_file = DesignFile::create([
             'design_id' => $request->design_id,
             'fake_file_path' => 'app/' . $path,

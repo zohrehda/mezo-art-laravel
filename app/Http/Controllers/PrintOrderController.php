@@ -25,9 +25,15 @@ class PrintOrderController extends Controller
     {
         $validator = $request->apiValidate([
             'print_type' => ['required', new Enum(DesignPrintType::class)],
-            'design_type' => ['required', new Enum(DesignType::class)]
+            'design_type' => ['required', new Enum(DesignType::class)],
+
         ]);
-        $printOrder = PrintOrder::create($validator->validated() + ['user_id' => auth()->user()->id]);
+
+        $printOrder = PrintOrder::create($validator->validated() +
+            [
+                'user_id' => auth()->user()->id,
+                'code' => rand(100000, 999999)
+            ]);
 
         return $this->createdResponse($printOrder);
 
@@ -38,7 +44,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder) ;
+        return $this->retrieve($printOrder->load('roll', 'patterns','orderFiles.file'));
     }
 
     /**
@@ -46,7 +52,57 @@ class PrintOrderController extends Controller
      */
     public function update(Request $request, PrintOrder $printOrder)
     {
-        //
+        $validator = $request->apiValidate([
+            'fabric_country_of_origin' => 'nullable',
+            'fabric_colorability' => 'nullable',
+            'fabric_weight' => 'nullable',
+            'fabric_color' => 'nullable',
+            'fabric_shrink' => 'nullable',
+
+            'roll_condition' => 'nullable',
+            'roll_shape' => 'nullable',
+            'roll_size' => 'nullable',
+            'roll_count' => 'nullable',
+            'roll_width' => 'nullable',
+            'patterns' => 'array',
+            'designs' => 'array',
+
+        ]);
+        $design_type = $printOrder->design_type;
+        $printOrder->update($validator->validated());
+        if ($design_type == 'pattern')
+            $printOrder->roll()->updateOrCreate([
+                'print_order_id' => $printOrder->id
+            ], $validator->validated());
+
+        if ($design_type == 'single') {
+            $printOrder->patterns()->sync(array_map(function ($item) {
+                return [
+                    'width' => $item['width'],
+                    'height' => $item['height'],
+                    'count' => $item['count'],
+                    'id' => $item['id'],
+                    'name' => $item['name']
+
+                ];
+            }, $request->patterns));
+        }
+
+        $printOrder->orderFiles()->sync(array_map(function ($item) {
+            return [
+                'design_width' => $item['design_width'] ?? null,
+                'design_height' => $item['design_height'] ?? null,
+                'design_direction' => $item['design_direction'] ?? null,
+                'count' => $item['count'] ?? null,
+                'roll_size' => $item['roll_size'] ?? null,
+                'id' => $item['id'],
+                'design_file_id' => $item['file_id']
+
+            ];
+        }, $request->designs));
+
+
+        return $this->updatedResponse($printOrder->refresh()->load('patterns','orderFiles.file'));
     }
 
     /**
@@ -54,6 +110,7 @@ class PrintOrderController extends Controller
      */
     public function destroy(PrintOrder $printOrder)
     {
-        //
+        $printOrder->delete();
+        return $this->deletedResponse();
     }
 }

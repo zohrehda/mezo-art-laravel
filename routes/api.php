@@ -8,6 +8,7 @@ use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\PaletteController;
 use App\Http\Controllers\PrintCartController;
 use App\Http\Controllers\PrintOrderController;
+use App\Http\Controllers\PrintOrderPatternController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\TagController;
@@ -75,6 +76,7 @@ Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.
 Route::apiResource('/page_builders', PageBuilderController::class)->middleware('auth:sanctum');
 
 Route::apiResource('/print_orders', PrintOrderController::class)->middleware('auth:sanctum');
+Route::apiResource('/print_order_patterns', PrintOrderPatternController::class)->middleware('auth:sanctum');
 
 Route::put('routes/{route}', [RouteController::class, 'update']);
 Route::get('routes', [RouteController::class, 'index']);

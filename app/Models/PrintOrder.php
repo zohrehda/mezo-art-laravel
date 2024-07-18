@@ -2,22 +2,49 @@
 
 namespace App\Models;
 
+use App\Model\Relations\HasManyRelationship;
+use App\Models\Relations\HasManySyncableRelationship;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PrintOrder extends Model
 {
-    use HasFactory, Filterable;
+    use HasFactory, Filterable, HasManySyncableRelationship;
     protected $fillable = [
         'user_id',
         'design_type',
-        'print_type'
+        'print_type',
+        'code',
+        'fabric_country_of_origin',
+        'fabric_colorability',
+        'fabric_weight',
+        'fabric_color',
+        'fabric_shrink',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function roll()
+    {
+        return $this->hasOne(PrintOrderRoll::class, 'print_order_id');
+    }
+
+    public function patterns()
+    {
+        return $this->hasManySyncable(PrintOrderPattern::class, 'print_order_id');
+    }
+
+
+
+    public function orderFiles()
+    {
+       // return $this->belongsToMany(DesignFile::class, 'print_order_files');
+
+        return $this->hasManySyncable(PrintOrderFile::class, 'print_order_id');
     }
 
     public function jsonSerialize(): mixed
