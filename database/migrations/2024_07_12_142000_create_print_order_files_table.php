@@ -15,8 +15,9 @@ return new class extends Migration {
             $table->foreignId('print_order_id');
             $table->foreignId('design_file_id');
             $table->foreignId('pattern_id')->nullable();
-            $table->unsignedBigInteger('design_width')->nullable();
-            $table->unsignedBigInteger('design_height')->nullable();
+            $table->unsignedDouble('design_width')->nullable();
+            $table->unsignedDouble('design_height')->nullable();
+            $table->double('design_resize_scale')->nullable();
             $table->unsignedBigInteger('roll_size')->nullable();
             $table->unsignedBigInteger('count')->nullable();
             $table->unsignedBigInteger('design_direction')->nullable();

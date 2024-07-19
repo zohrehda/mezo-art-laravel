@@ -30,6 +30,7 @@ class DesignFile extends Model
     ];
     protected $appends = ['link', 'is_in_print_cart'];
 
+
     public function design()
     {
         return $this->belongsTo(Design::class);
@@ -48,7 +49,7 @@ class DesignFile extends Model
         );
     }
 
-   
+
 
     protected function getIsInPrintCartAttribute(
 

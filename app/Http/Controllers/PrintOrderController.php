@@ -96,16 +96,19 @@ class PrintOrderController extends Controller
             }, $request->patterns));
         }
 
-        $printOrder->orderFiles()->sync(array_map(function ($item) {
+        // dd($printOrder->patterns->toArray()['0']);
+
+        $printOrder->orderFiles()->sync(array_map(function ($item) use ($printOrder) {
             return [
                 'design_width' => $item['design_width'] ?? null,
                 'design_height' => $item['design_height'] ?? null,
+                'design_resize_scale' => $item['design_resize_scale'] ?? null,
                 'design_direction' => $item['design_direction'] ?? null,
+                'pattern_id' => isset($item['pattern_index']) ? $printOrder->patterns->toArray()[$item['pattern_index']]['id']??null : null,
                 'count' => $item['count'] ?? null,
                 'roll_size' => $item['roll_size'] ?? null,
                 'id' => $item['id'],
                 'design_file_id' => $item['file_id']
-
             ];
         }, $request->designs));
 

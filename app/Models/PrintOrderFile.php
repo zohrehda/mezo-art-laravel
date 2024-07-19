@@ -14,6 +14,7 @@ class PrintOrderFile extends Model
         'design_file_id',
         'design_width',
         'design_height',
+        'design_resize_scale',
         'design_direction',
         'roll_size',
         'count',
