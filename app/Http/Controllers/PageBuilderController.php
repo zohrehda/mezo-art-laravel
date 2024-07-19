@@ -12,8 +12,8 @@ class PageBuilderController extends Controller
      */
     public function index()
     {
-        $pages_builder = PageBuilder::filter()->get();
-        return $this->retrieve($pages_builder);
+        return PageBuilder::filter()->paginate22();
+
     }
 
     /**
