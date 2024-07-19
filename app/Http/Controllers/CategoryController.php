@@ -13,7 +13,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $ds = $request->ds;
-        $categories = ($ds == 'flat') ? Category::filter()->get() : Category::filter()->where('parent_id', null)->with('children')->get();
+        return ($ds == 'flat') ? Category::filter()->paginate22() : Category::filter()->where('parent_id', null)->with('children')->paginate22();
         return $this->retrieve($categories);
     }
 
