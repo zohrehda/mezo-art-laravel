@@ -17,9 +17,7 @@ trait ApiResponseBuilderTrait
 
     public function retrieve($data)
     {
-        return $this->response(trans('messages.retrieved'), $data, 200, [
-            'total' => count($data)
-        ]);
+        return $this->response(trans('messages.retrieved'));
     }
 
     public function createdResponse($data)
