@@ -12,6 +12,7 @@ class FabricMaterialController extends Controller
      */
     public function index()
     {
+        return FabricMaterial::filter()->paginate22();
         return $this->retrieve(FabricMaterial::filter()->get());
     }
 
@@ -20,7 +21,11 @@ class FabricMaterialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->apiValidate([
+            'name' => 'sometimes'
+        ]);
+        $fabricMaterial = FabricMaterial::create($validator->validated());
+        return $this->createdResponse($fabricMaterial);
     }
 
     /**
@@ -28,7 +33,7 @@ class FabricMaterialController extends Controller
      */
     public function show(FabricMaterial $fabricMaterial)
     {
-        //
+
     }
 
     /**
@@ -36,7 +41,14 @@ class FabricMaterialController extends Controller
      */
     public function update(Request $request, FabricMaterial $fabricMaterial)
     {
-        //
+        $validator = $request->apiValidate([
+            'name' => 'sometimes'
+        ]);
+
+        $fabricMaterial->update($validator->validated());
+
+        return $this->updatedResponse($fabricMaterial);
+
     }
 
     /**
@@ -44,6 +56,7 @@ class FabricMaterialController extends Controller
      */
     public function destroy(FabricMaterial $fabricMaterial)
     {
-        //
+        $fabricMaterial->delete();
+        return $this->deletedResponse();
     }
 }

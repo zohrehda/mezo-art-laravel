@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait ApiResponseBuilderTrait
 {
-    
+
     public function response($message, $data = [], $status_code = 200, $meta = [])
     {
         return response()->json([
@@ -17,22 +17,24 @@ trait ApiResponseBuilderTrait
 
     public function retrieve($data)
     {
-        return  $this->response(trans('messages.retrieved'), $data);
+        return $this->response(trans('messages.retrieved'), $data, 200, [
+            'total' => count($data)
+        ]);
     }
 
     public function createdResponse($data)
     {
-        return  $this->response(trans('messages.created'), $data);
+        return $this->response(trans('messages.created'), $data);
     }
 
     public function updatedResponse($data)
     {
-        return  $this->response(trans('messages.updated'), $data);
+        return $this->response(trans('messages.updated'), $data);
     }
 
 
     public function deletedResponse()
     {
-        return  $this->response(trans('messages.deleted'));
+        return $this->response(trans('messages.deleted'));
     }
 }
