@@ -17,7 +17,7 @@ trait ApiResponseBuilderTrait
 
     public function retrieve($data)
     {
-        return $this->response(trans('messages.retrieved'));
+        return $this->response(trans('messages.retrieved'), $data);
     }
 
     public function createdResponse($data)
