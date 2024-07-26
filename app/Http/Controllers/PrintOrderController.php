@@ -34,12 +34,12 @@ class PrintOrderController extends Controller
         $validator = $request->apiValidate([
             'print_type' => ['required', new Enum(DesignPrintType::class)],
             'design_type' => ['required', new Enum(DesignType::class)],
-
+            'user_id' => 'nullable|exists:users,id'
         ]);
 
         $printOrder = PrintOrder::create($validator->validated() +
             [
-                'user_id' => auth()->user()->id,
+                'user_id' => $request->input('user_id', auth()->user()->id),
                 'code' => rand(100000, 999999)
             ]);
 
@@ -104,7 +104,7 @@ class PrintOrderController extends Controller
                 'design_height' => $item['design_height'] ?? null,
                 'design_resize_scale' => $item['design_resize_scale'] ?? null,
                 'design_direction' => $item['design_direction'] ?? null,
-                'pattern_id' => isset($item['pattern_index']) ? $printOrder->patterns->toArray()[$item['pattern_index']]['id']??null : null,
+                'pattern_id' => isset($item['pattern_index']) ? $printOrder->patterns->toArray()[$item['pattern_index']]['id'] ?? null : null,
                 'count' => $item['count'] ?? null,
                 'roll_size' => $item['roll_size'] ?? null,
                 'id' => $item['id'],
