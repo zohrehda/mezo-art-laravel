@@ -27,6 +27,7 @@ return new class extends Migration {
 
             //   $table->string('fabric_type')->nullable();
             $table->string('status')->default('created'); //created, 
+            $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
             $table->timestamps();
         });

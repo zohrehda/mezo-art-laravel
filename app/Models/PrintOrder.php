@@ -21,12 +21,23 @@ class PrintOrder extends Model
         'fabric_weight',
         'fabric_color',
         'fabric_shrink',
-        'fabric_material_id'
+        'fabric_material_id',
+        'updated_by',
+        'created_by'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class,'created_by');
+    }
+    public function updater()
+    {
+        return $this->belongsTo(User::class,'updated_by');
     }
 
     public function roll()
@@ -43,7 +54,7 @@ class PrintOrder extends Model
 
     public function orderFiles()
     {
-       // return $this->belongsToMany(DesignFile::class, 'print_order_files');
+        // return $this->belongsToMany(DesignFile::class, 'print_order_files');
 
         return $this->hasManySyncable(PrintOrderFile::class, 'print_order_id');
     }
