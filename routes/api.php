@@ -76,6 +76,7 @@ Route::post('/editor_uploader', [FileController::class, 'editorUpload'])->name('
 Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
 Route::apiResource('/page_builders', PageBuilderController::class)->middleware('auth:sanctum');
 
+Route::put('print_orders/{printOrder}/assessments')->middleware('auth:sanctum');
 Route::apiResource('/print_orders', PrintOrderController::class)->middleware('auth:sanctum');
 Route::apiResource('/print_order_patterns', PrintOrderPatternController::class)->middleware('auth:sanctum');
 
@@ -83,8 +84,8 @@ Route::put('routes/{route}', [RouteController::class, 'update']);
 Route::get('routes', [RouteController::class, 'index']);
 Route::get('routes/{route}', [RouteController::class, 'show']);
 
-Route::apiResource('accessory_suppliers', AccessorySupplierController::class) ;
-Route::apiResource('fabric_materials', FabricMaterialController::class) ;
+Route::apiResource('accessory_suppliers', AccessorySupplierController::class);
+Route::apiResource('fabric_materials', FabricMaterialController::class);
 
 Route::prefix('me')->middleware('auth:sanctum')->group(function () {
 

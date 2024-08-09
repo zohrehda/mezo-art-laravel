@@ -36,14 +36,14 @@ class PrintOrderController extends Controller
             'design_type' => ['required', new Enum(DesignType::class)],
             'user_id' => 'nullable|exists:users,id'
         ]);
- 
+
         $printOrder = PrintOrder::create(
-            $validator->safe()->except(['user_id'])  +
-                [
-                    'user_id' => $request->input('user_id') ?: auth()->user()->id,
-                    'code' => rand(100000, 999999),
-                    'created_by' => auth()->user()->id
-                ]
+            $validator->safe()->except(['user_id']) +
+            [
+                'user_id' => $request->input('user_id') ?: auth()->user()->id,
+                'code' => rand(100000, 999999),
+                'created_by' => auth()->user()->id
+            ]
         );
         return $this->createdResponse($printOrder);
     }
@@ -53,7 +53,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file'));
+        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file','assessment'));
     }
 
     /**
@@ -75,12 +75,15 @@ class PrintOrderController extends Controller
             'roll_width' => 'nullable',
             'patterns' => 'array',
             'designs' => 'array',
-
+            'assessment' => 'array|nullable'
         ]);
         $design_type = $printOrder->design_type;
         $printOrder->update($validator->validated() + [
             'updated_by' => auth()->user()->id
         ]);
+        $printOrder->assessment()->updateOrCreate([
+            'print_order_id' => $printOrder->id,
+        ], $request->assessment);
 
         if ($design_type == 'pattern')
             $printOrder->roll()->updateOrCreate([
