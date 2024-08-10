@@ -13,31 +13,40 @@ class PrintOrderAssessment extends Model
         'print_order_id',
         'approval_method',
         'operator_approval_date',
+        'operator_approval',
         'warehouse_approval_date',
+        'warehouse_approval',
         'sample_approval_date',
+        'sample_approval',
         'description',
         'payment_method',
         'prepayment_amount',
         'sub_total' ,
-        'additional_services_cost'
+        'additional_services_cost' ,
+        'amount_per_meter' ,
+        'amount_per_file'
     ];
+
+    protected $casts=[
+        'amount_per_file'=>'json'
+    ] ;
 
     public function printOrder()
     {
         return $this->belongsTo(PrintOrder::class);
     }
 
-    public function setSampleApprovalDateAttribute($value)
+    public function setSampleApprovalAttribute($value)
     {
         $this->attributes['sample_approval_date'] = $value ? Carbon::now() : null;
     }
 
-    public function setOperatorApprovalDateAttribute($value)
+    public function setOperatorApprovalAttribute($value)
     {
         $this->attributes['operator_approval_date'] = $value ? Carbon::now() : null;
     }
 
-    public function setWarehouseApprovalDateAttribute($value)
+    public function setWarehouseApprovalAttribute($value)
     {
         $this->attributes['warehouse_approval_date'] = $value ? Carbon::now() : null;
     }

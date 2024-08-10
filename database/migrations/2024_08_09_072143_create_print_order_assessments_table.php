@@ -19,9 +19,11 @@ return new class extends Migration
             $table->dateTime('sample_approval_date')->nullable();
             $table->dateTime('warehouse_approval_date')->nullable();
             $table->string('payment_method')->nullable();
-            $table->bigInteger('prepayment_amount')->nullable();
-            $table->bigInteger('additional_services_cost')->nullable();
-            $table->bigInteger('sub_total')->nullable();
+            $table->unsignedBigInteger('prepayment_amount')->nullable();
+            $table->unsignedBigInteger('additional_services_cost')->nullable();
+            $table->unsignedBigInteger('sub_total')->nullable();
+            $table->unsignedBigInteger('amount_per_meter')->nullable();
+            $table->json('amount_per_file')->nullable() ;
             $table->text('description')->nullable();
             $table->timestamps();
         });
