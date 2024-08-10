@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('print_order_assessments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('print_order_id')->constrained('print_orders')->onDelete('cascade') ;
+            $table->foreignId('print_order_id')->constrained('print_orders')->onDelete('cascade');
             $table->string('approval_method')->nullable();
             $table->dateTime('operator_approval_date')->nullable();
             $table->dateTime('sample_approval_date')->nullable();
             $table->dateTime('warehouse_approval_date')->nullable();
-            $table->string('payment_method')->nullable() ;
-            $table->bigInteger('prepayment_amount')->nullable() ;
-            $table->bigInteger('additional_services_cost')->nullable() ;
-            $table->text('description')->nullable() ;
+            $table->string('payment_method')->nullable();
+            $table->bigInteger('prepayment_amount')->nullable();
+            $table->bigInteger('additional_services_cost')->nullable();
+            $table->bigInteger('sub_total')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

@@ -17,7 +17,9 @@ class PrintOrderAssessment extends Model
         'sample_approval_date',
         'description',
         'payment_method',
-        'prepayment_amount'
+        'prepayment_amount',
+        'sub_total' ,
+        'additional_services_cost'
     ];
 
     public function printOrder()
