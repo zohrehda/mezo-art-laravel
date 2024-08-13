@@ -24,11 +24,13 @@ class PrintOrderAssessment extends Model
         'sub_total' ,
         'additional_services_cost' ,
         'amount_per_meter' ,
-        'amount_per_file'
+        'amount_per_file' ,
+        'credit_payment'
     ];
 
     protected $casts=[
-        'amount_per_file'=>'json'
+        'amount_per_file'=>'json' ,
+        'credit_payment'=>'boolean'
     ] ;
 
     public function printOrder()

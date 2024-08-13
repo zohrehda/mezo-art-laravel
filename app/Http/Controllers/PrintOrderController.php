@@ -77,6 +77,7 @@ class PrintOrderController extends Controller
             'designs' => 'array',
             'assessment' => 'array|nullable'
         ]);
+     
         $design_type = $printOrder->design_type;
         $printOrder->update($validator->validated() + [
             'updated_by' => auth()->user()->id

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sub_total')->nullable();
             $table->unsignedBigInteger('amount_per_meter')->nullable();
             $table->json('amount_per_file')->nullable() ;
+            $table->boolean('credit_payment')->default(false) ;
             $table->text('description')->nullable();
             $table->timestamps();
         });
