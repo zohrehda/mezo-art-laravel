@@ -52,7 +52,12 @@ class PrintOrder extends Model
 
     public function assessment()
     {
-        return $this->hasOne(PrintOrderAssessment::class) ;
+        return $this->hasOne(PrintOrderAssessment::class);
+    }
+
+    public function process()
+    {
+        return $this->hasOne(PrintOrderProcess::class);
     }
 
 

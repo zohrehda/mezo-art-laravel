@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,13 +17,17 @@ return new class extends Migration
             $table->dateTime('operator_approval_date')->nullable();
             $table->dateTime('sample_approval_date')->nullable();
             $table->dateTime('warehouse_approval_date')->nullable();
+            $table->dateTime('financial_approval_date')->nullable();
             $table->string('payment_method')->nullable();
             $table->unsignedBigInteger('prepayment_amount')->nullable();
             $table->unsignedBigInteger('additional_services_cost')->nullable();
             $table->unsignedBigInteger('sub_total')->nullable();
+            $table->unsignedBigInteger('total_amount')->nullable();
             $table->unsignedBigInteger('amount_per_meter')->nullable();
-            $table->json('amount_per_file')->nullable() ;
-            $table->boolean('credit_payment')->default(false) ;
+            $table->json('amount_per_file')->nullable();
+            $table->boolean('credit_payment')->default(0);
+            $table->string('preparation_time')->nullable();
+            $table->string('observer')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

@@ -53,7 +53,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file','assessment'));
+        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment','process'));
     }
 
     /**
@@ -75,16 +75,26 @@ class PrintOrderController extends Controller
             'roll_width' => 'nullable',
             'patterns' => 'array',
             'designs' => 'array',
-            'assessment' => 'array|nullable'
+            'assessment' => 'array|nullable',
+            'process' => 'array'
         ]);
-     
+
         $design_type = $printOrder->design_type;
         $printOrder->update($validator->validated() + [
             'updated_by' => auth()->user()->id
         ]);
         $printOrder->assessment()->updateOrCreate([
             'print_order_id' => $printOrder->id,
-        ], $request->assessment);
+        ], $request->assessment + [
+                'total_amount' =>
+                    ($request->assessment['sub_total'] ?? 0) +
+                    ($request->assessment['additional_services_cost'] ?? 0)
+            ]);
+
+        $printOrder->process()->updateOrCreate([
+            'print_order_assessment_id'=>$printOrder->assessment->id ,
+            'print_order_id' => $printOrder->id,
+        ], $request->process);
 
         if ($design_type == 'pattern')
             $printOrder->roll()->updateOrCreate([
