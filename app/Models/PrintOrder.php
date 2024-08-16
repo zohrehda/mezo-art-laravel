@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PrintOrderStatus;
 use App\Model\Relations\HasManyRelationship;
 use App\Models\Relations\HasManySyncableRelationship;
 use App\Models\Traits\Filterable;
@@ -24,11 +25,16 @@ class PrintOrder extends Model
         'fabric_material_id',
         'press',
         'updated_by',
-        'created_by'
+        'created_by',
+        'admin_access',
+        'status',
+        'user_access'
     ];
 
     protected $casts = [
-        'press' => 'boolean'
+        'press' => 'boolean',
+        'admin_access' => 'boolean',
+        'user_access' => 'boolean',
     ];
 
     public function user()
@@ -79,7 +85,10 @@ class PrintOrder extends Model
         return [
             ...$this->toArray(),
             'print_type_fa' => trans("messages.print_type." . $this->print_type),
-            'design_type_fa' => trans("messages.design_type." . $this->design_type)
+            'design_type_fa' => trans("messages.design_type." . $this->design_type),
+            'user_can_edit' => $this->status == PrintOrderStatus::IN_PROGRESS,
+            'admin_can_edit' => $this->admin_access,
+            'user_can_complete' => false
         ];
     }
 }

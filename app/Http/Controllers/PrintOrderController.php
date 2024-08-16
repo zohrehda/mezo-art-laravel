@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\DesignPrintType;
 use App\Enums\DesignType;
+use App\Enums\PrintOrderStatus;
 use App\Models\PrintOrder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
@@ -77,13 +78,22 @@ class PrintOrderController extends Controller
             'patterns' => 'array',
             'designs' => 'array',
             'assessment' => 'array|nullable',
-            'process' => 'array'
+            'process' => 'array',
+            'admin_access' => 'boolean',
+            'user_access' => 'boolean',
+
         ]);
 
         $design_type = $printOrder->design_type;
-        $printOrder->update($validator->validated() + [
-            'updated_by' => auth()->user()->id
-        ]);
+        $data = $validator->validated() + [
+            'updated_by' => auth()->user()->id,
+             
+        ];
+       // dd($request->input('final'))
+        if ($request->input('final') == true)
+            $data['status'] = PrintOrderStatus::UNDERGRADUATE;
+
+        $printOrder->update($data);
         $printOrder->assessment()->updateOrCreate([
             'print_order_id' => $printOrder->id,
         ], $request->assessment + [
