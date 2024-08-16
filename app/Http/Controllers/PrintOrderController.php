@@ -53,7 +53,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment','process'));
+        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'process'));
     }
 
     /**
@@ -73,6 +73,7 @@ class PrintOrderController extends Controller
             'roll_size' => 'nullable',
             'roll_count' => 'nullable',
             'roll_width' => 'nullable',
+            'press' => 'boolean',
             'patterns' => 'array',
             'designs' => 'array',
             'assessment' => 'array|nullable',
@@ -92,7 +93,7 @@ class PrintOrderController extends Controller
             ]);
 
         $printOrder->process()->updateOrCreate([
-            'print_order_assessment_id'=>$printOrder->assessment->id ,
+            'print_order_assessment_id' => $printOrder->assessment->id,
             'print_order_id' => $printOrder->id,
         ], $request->process);
 
@@ -124,7 +125,7 @@ class PrintOrderController extends Controller
                 'design_direction' => $item['design_direction'] ?? null,
                 'pattern_id' => isset($item['pattern_index']) ? $printOrder->patterns->toArray()[$item['pattern_index']]['id'] ?? null : null,
                 'count' => $item['count'] ?? null,
-                'roll_size' => $item['roll_size'] ?? null,
+                'print_size' => $item['print_size'] ?? null,
                 'id' => $item['id'],
                 'design_file_id' => $item['file_id']
             ];
@@ -141,5 +142,17 @@ class PrintOrderController extends Controller
     {
         $printOrder->delete();
         return $this->deletedResponse();
+    }
+
+    public function report(PrintOrder $printOrder)
+    {
+        // dd('ff');
+        return view('reports.print_order');
+
+        return Pdf::view('reports.print_order')
+            ->format('a4')
+            ->name('your-invoice.pdf');
+
+        ;
     }
 }

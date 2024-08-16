@@ -77,6 +77,9 @@ Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.
 Route::apiResource('/page_builders', PageBuilderController::class)->middleware('auth:sanctum');
 
 Route::put('print_orders/{printOrder}/assessments')->middleware('auth:sanctum');
+Route::get('/print_orders/{printOrder}/report', [PrintOrderController::class, 'report'])
+//->middleware('auth:sanctum')
+;
 Route::apiResource('/print_orders', PrintOrderController::class)->middleware('auth:sanctum');
 Route::apiResource('/print_order_patterns', PrintOrderPatternController::class)->middleware('auth:sanctum');
 

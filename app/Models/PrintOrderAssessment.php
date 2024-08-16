@@ -29,6 +29,8 @@ class PrintOrderAssessment extends Model
         'amount_per_meter',
         'amount_per_file',
         'credit_payment',
+        'observer',
+        'credit_amount',
         'preparation_time'
     ];
 

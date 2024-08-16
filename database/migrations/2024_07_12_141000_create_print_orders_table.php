@@ -23,8 +23,7 @@ return new class extends Migration {
             $table->string('fabric_weight')->nullable();
             $table->string('fabric_color')->nullable();
             $table->string('fabric_shrink')->nullable();
-         
-
+            $table->boolean('press')->default(1);
             //   $table->string('fabric_type')->nullable();
             $table->string('status')->default('created'); //created, 
             $table->foreignId('created_by')->nullable();

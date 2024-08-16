@@ -22,8 +22,13 @@ class PrintOrder extends Model
         'fabric_color',
         'fabric_shrink',
         'fabric_material_id',
+        'press',
         'updated_by',
         'created_by'
+    ];
+
+    protected $casts = [
+        'press' => 'boolean'
     ];
 
     public function user()

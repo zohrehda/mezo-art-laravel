@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->unsignedDouble('design_width')->nullable();
             $table->unsignedDouble('design_height')->nullable();
             $table->double('design_resize_scale')->nullable();
-            $table->unsignedBigInteger('roll_size')->nullable();
+            $table->unsignedBigInteger('print_size')->nullable();
             $table->unsignedBigInteger('count')->nullable();
             $table->unsignedBigInteger('design_direction')->nullable();
             $table->timestamps();

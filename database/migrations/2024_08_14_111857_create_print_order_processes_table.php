@@ -31,6 +31,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('print_order_proccess');
+        Schema::dropIfExists('print_order_processes');
     }
 };
