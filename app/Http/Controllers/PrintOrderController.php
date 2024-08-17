@@ -40,11 +40,11 @@ class PrintOrderController extends Controller
 
         $printOrder = PrintOrder::create(
             $validator->safe()->except(['user_id']) +
-                [
-                    'user_id' => $request->input('user_id') ?: auth()->user()->id,
-                    'code' => rand(100000, 999999),
-                    'created_by' => auth()->user()->id
-                ]
+            [
+                'user_id' => $request->input('user_id') ?: auth()->user()->id,
+                'code' => rand(100000, 999999),
+                'created_by' => auth()->user()->id
+            ]
         );
         return $this->createdResponse($printOrder);
     }
@@ -98,9 +98,15 @@ class PrintOrderController extends Controller
 
 
 
-        $printOrder->assessment()->updateOrCreate([
+        $assessment = $printOrder->assessment()->updateOrCreate([
             'print_order_id' => $printOrder->id,
         ], $request->input('assessment', []));
+
+        if ($assessment->operator_approval_date && $assessment->warehouse_approval_date && $assessment->financial_approval_date) {
+            $printOrder->update([
+                'status' => PrintOrderStatus::PAYMENT_AWAITING
+            ]);
+        }
 
         $printOrder->process()->updateOrCreate([
             'print_order_assessment_id' => $printOrder->assessment->id,
@@ -161,6 +167,7 @@ class PrintOrderController extends Controller
 
         return Pdf::view('reports.print_order')
             ->format('a4')
-            ->name('your-invoice.pdf');;
+            ->name('your-invoice.pdf');
+        ;
     }
 }
