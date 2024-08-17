@@ -40,11 +40,11 @@ class PrintOrderController extends Controller
 
         $printOrder = PrintOrder::create(
             $validator->safe()->except(['user_id']) +
-            [
-                'user_id' => $request->input('user_id') ?: auth()->user()->id,
-                'code' => rand(100000, 999999),
-                'created_by' => auth()->user()->id
-            ]
+                [
+                    'user_id' => $request->input('user_id') ?: auth()->user()->id,
+                    'code' => rand(100000, 999999),
+                    'created_by' => auth()->user()->id
+                ]
         );
         return $this->createdResponse($printOrder);
     }
@@ -84,28 +84,28 @@ class PrintOrderController extends Controller
 
         ]);
 
+
         $design_type = $printOrder->design_type;
         $data = $validator->validated() + [
             'updated_by' => auth()->user()->id,
-             
+
         ];
-       // dd($request->input('final'))
+        // dd($request->input('final'))
         if ($request->input('final') == true)
             $data['status'] = PrintOrderStatus::UNDERGRADUATE;
 
         $printOrder->update($data);
+
+
+
         $printOrder->assessment()->updateOrCreate([
             'print_order_id' => $printOrder->id,
-        ], $request->assessment + [
-                'total_amount' =>
-                    ($request->assessment['sub_total'] ?? 0) +
-                    ($request->assessment['additional_services_cost'] ?? 0)
-            ]);
+        ], $request->input('assessment', []));
 
         $printOrder->process()->updateOrCreate([
             'print_order_assessment_id' => $printOrder->assessment->id,
             'print_order_id' => $printOrder->id,
-        ], $request->process);
+        ], $request->input('process', []));
 
         if ($design_type == 'pattern')
             $printOrder->roll()->updateOrCreate([
@@ -139,7 +139,7 @@ class PrintOrderController extends Controller
                 'id' => $item['id'],
                 'design_file_id' => $item['file_id']
             ];
-        }, $request->designs));
+        }, $request->input('designs', [])));
 
 
         return $this->updatedResponse($printOrder->refresh()->load('patterns', 'orderFiles.file'));
@@ -161,8 +161,6 @@ class PrintOrderController extends Controller
 
         return Pdf::view('reports.print_order')
             ->format('a4')
-            ->name('your-invoice.pdf');
-
-        ;
+            ->name('your-invoice.pdf');;
     }
 }

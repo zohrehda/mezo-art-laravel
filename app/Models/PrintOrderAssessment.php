@@ -39,7 +39,19 @@ class PrintOrderAssessment extends Model
         'credit_payment' => 'boolean'
     ];
 
+    protected static function boot()
+    {
+        // 'total_amount' => ($request->assessment['sub_total'] ?? 0) +
+        // ($request->assessment['additional_services_cost'] ?? 0)
 
+        parent::boot();
+        static::saving(function ($model) {
+            $model->fill([
+                'total_amount' => ($model->sub_total ?? 0) + ($model->additional_services_cost ?? 0) ,
+                
+            ]);
+        });
+    }
 
     public function printOrder()
     {

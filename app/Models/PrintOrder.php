@@ -88,7 +88,16 @@ class PrintOrder extends Model
             'design_type_fa' => trans("messages.design_type." . $this->design_type),
             'user_can_edit' => $this->status == PrintOrderStatus::IN_PROGRESS,
             'admin_can_edit' => $this->admin_access,
-            'user_can_complete' => false
+            'user_can_complete'=>
+            ($this->assessment->operator_approval_date ?? false)   and
+            ($this->assessment->warehouse_approval_date ?? false)   and
+            ($this->assessment->financial_approval_date ?? false)               
+            ,
+
+            
+            // 'user_can_complete' => $this->assessment->operator_approval_date ?? false and
+            //     $this->assessment->$this->assessment->warehouse_approval_date ?? false and
+            //     $this->assessment->$this->assessment->financial_approval_date ?? false
         ];
     }
 }
