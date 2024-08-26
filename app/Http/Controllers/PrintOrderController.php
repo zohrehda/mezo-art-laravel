@@ -54,7 +54,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'process'));
+        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'installments', 'process'));
     }
 
     /**
@@ -81,6 +81,9 @@ class PrintOrderController extends Controller
             'process' => 'array',
             'admin_access' => 'boolean',
             'user_access' => 'boolean',
+            'installments' => 'array',
+            'installments.*.amount' => 'integer',
+            'installments.*.is_paid' => 'boolean',
 
         ]);
 
@@ -107,6 +110,31 @@ class PrintOrderController extends Controller
                 'status' => PrintOrderStatus::PAYMENT_AWAITING
             ]);
         }
+
+        $printOrder->installments()->sync(
+            array_map(
+                function ($item) use($printOrder) {
+                    return [
+                        'id' => $item['id']??null,
+                        'amount' => $item['amount'],
+                        'is_paid' => $item['is_paid'],
+                        'user_id' => $printOrder->user_id,
+
+                    ];
+                },
+                $request->input('installments', [])
+            )
+        );
+        // foreach ($request->input('installments', []) as $installment) {
+        //     $printOrder->installments()->updateOrCreate([
+        //         'id' => $installment['id'] ?? null
+        //     ], [
+        //         'user_id' => $printOrder->user_id,
+        //         'amount' => $installment['amount'],
+        //         'is_paid' => $installment['is_paid'],
+
+        //     ]);
+        // }
 
         $printOrder->process()->updateOrCreate([
             'print_order_assessment_id' => $printOrder->assessment->id,
@@ -148,7 +176,7 @@ class PrintOrderController extends Controller
         }, $request->input('designs', [])));
 
 
-        return $this->updatedResponse($printOrder->refresh()->load('patterns', 'orderFiles.file'));
+        return $this->updatedResponse($printOrder->refresh()->load('patterns', 'installments', 'orderFiles.file'));
     }
 
     /**
