@@ -50,9 +50,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile',
         'has_password',
-        'city' ,
-        'province' ,
-       
+        'city',
+        'province',
+
     ];
 
     /**
@@ -100,6 +100,11 @@ class User extends Authenticatable
     public function image()
     {
         return $this->morphOne(File::class, 'fileable');
+    }
+
+    public function print_orders()
+    {
+        return $this->belongsTo(PrintOrder::class);
     }
 
 
