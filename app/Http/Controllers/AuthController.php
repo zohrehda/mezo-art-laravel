@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Views\UserView;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
@@ -152,7 +153,8 @@ class AuthController extends Controller
 
     public function me()
     {
-        $user = auth()->user()->load(['meta', 'image']);
+       // $user = auth()->user()->load(['meta', 'image']);
+        $user = UserView::find(auth()->user()->id)->load(['meta', 'image']);
         return $this->retrieve($user);
     }
 

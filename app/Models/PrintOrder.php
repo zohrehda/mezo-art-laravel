@@ -68,12 +68,12 @@ class PrintOrder extends Model
 
     public function assessment()
     {
-        return $this->hasOne(PrintOrderAssessment::class);
+        return $this->hasOne(PrintOrderAssessment::class,'print_order_id');
     }
 
     public function process()
     {
-        return $this->hasOne(PrintOrderProcess::class);
+        return $this->hasOne(PrintOrderProcess::class,'print_order_id');
     }
 
 
@@ -91,7 +91,7 @@ class PrintOrder extends Model
             ...$this->toArray(),
             'print_type_fa' => trans("messages.print_type." . $this->print_type),
             'design_type_fa' => trans("messages.design_type." . $this->design_type),
-            'user_can_edit' => $this->status == PrintOrderStatus::IN_PROGRESS,
+            'user_can_edit' => $this->status == PrintOrderStatus::IN_PROGRESS || $this->user_access,
             'admin_can_edit' => $this->admin_access,
             'user_can_complete' =>
                 ($this->assessment->operator_approval_date ?? false) and

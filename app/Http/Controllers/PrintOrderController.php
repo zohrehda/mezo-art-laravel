@@ -6,6 +6,7 @@ use App\Enums\DesignPrintType;
 use App\Enums\DesignType;
 use App\Enums\PrintOrderStatus;
 use App\Models\PrintOrder;
+use App\Models\Views\PrintOrderView;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
 
@@ -16,7 +17,7 @@ class PrintOrderController extends Controller
      */
     public function index()
     {
-        return PrintOrder::filter()
+        return PrintOrderView::filter()
             ->paginate22();
     }
 
@@ -94,8 +95,11 @@ class PrintOrderController extends Controller
 
         ];
         // dd($request->input('final'))
-        if ($request->input('final') == true)
+        if ($request->input('final') == true) {
             $data['status'] = PrintOrderStatus::UNDERGRADUATE;
+            $data['user_access'] = false;
+
+        }
 
         $printOrder->update($data);
 
@@ -107,17 +111,17 @@ class PrintOrderController extends Controller
 
         if ($assessment->operator_approval_date && $assessment->warehouse_approval_date && $assessment->financial_approval_date) {
             $printOrder->update([
-                'status' => PrintOrderStatus::PAYMENT_AWAITING
+                'status' => PrintOrderStatus::USER_CONFIRMATION
             ]);
         }
 
         $printOrder->installments()->sync(
             array_map(
-                function ($item) use($printOrder) {
+                function ($item) use ($printOrder) {
                     return [
-                        'id' => $item['id']??null,
+                        'id' => $item['id'] ?? null,
                         'amount' => $item['amount'],
-                        'is_paid' => $item['is_paid'],
+                        'is_paid' => $item['is_paid'] ?? 0,
                         'user_id' => $printOrder->user_id,
 
                     ];
@@ -156,7 +160,7 @@ class PrintOrderController extends Controller
                     'name' => $item['name']
 
                 ];
-            }, $request->patterns));
+            }, $request->input('patterns',[])));
         }
 
         // dd($printOrder->patterns->toArray()['0']);

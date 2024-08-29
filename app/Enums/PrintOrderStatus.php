@@ -6,10 +6,16 @@ enum PrintOrderStatus: string
 {
     case IN_PROGRESS = 'in_progress';
     case UNDERGRADUATE = 'undergraduate';
-    case PAYMENT_AWAITING = 'payment_awaiting';
-    case PAID = 'paid';
+
+    case USER_CONFIRMATION = 'user_confirmation';
+    case PREPARATION = 'preparation';
     case PRINTING = 'printing';
     case DONE = 'done';
+
+
+    // case PAYMENT_AWAITING = 'payment_awaiting';
+    // case PAID = 'paid';
+
 
 
 

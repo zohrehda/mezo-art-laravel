@@ -65,9 +65,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function getMorphClass(){
+        return self::class ;
+    }
+
     public function meta()
     {
-        return $this->hasOne(UserMeta::class);
+        return $this->hasOne(UserMeta::class, 'user_id');
     }
     protected function profile(): Attribute
     {
@@ -104,7 +108,7 @@ class User extends Authenticatable
 
     public function print_orders()
     {
-        return $this->belongsTo(PrintOrder::class);
+        return $this->belongsTo(PrintOrder::class, 'user_id');
     }
 
 
