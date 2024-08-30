@@ -15,6 +15,7 @@ use App\Http\Controllers\RouteController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketMessageController;
+use App\Http\Controllers\TransactionReceiptController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\AccessorySupplierController;
@@ -78,7 +79,7 @@ Route::apiResource('/page_builders', PageBuilderController::class)->middleware('
 
 Route::put('print_orders/{printOrder}/assessments')->middleware('auth:sanctum');
 Route::get('/print_orders/{printOrder}/report', [PrintOrderController::class, 'report'])
-//->middleware('auth:sanctum')
+    //->middleware('auth:sanctum')
 ;
 Route::apiResource('/print_orders', PrintOrderController::class)->middleware('auth:sanctum');
 Route::apiResource('/print_order_patterns', PrintOrderPatternController::class)->middleware('auth:sanctum');
@@ -89,6 +90,7 @@ Route::get('routes/{route}', [RouteController::class, 'show']);
 
 Route::apiResource('accessory_suppliers', AccessorySupplierController::class);
 Route::apiResource('fabric_materials', FabricMaterialController::class);
+Route::apiResource('transaction_receipts', TransactionReceiptController::class)->middleware('auth:sanctum');
 
 Route::prefix('me')->middleware('auth:sanctum')->group(function () {
 

@@ -10,14 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('installments', function (Blueprint $table) {
+        Schema::create('transaction_receipts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('print_order_id');
-            $table->unsignedBigInteger('amount');
-            $table->boolean('is_paid')->default(0);
-            $table->string('type')->nullable();
-            $table->string('payment_method')->nullable();
+            $table->foreignId('installment_id')->constrained('installments');
+            $table->unsignedBigInteger('amount')->nullable();
+            $table->unsignedBigInteger('transaction_num')->nullable();
+            $table->dateTime('payment_date')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('installments');
+        Schema::dropIfExists('transaction_receipts');
     }
 };

@@ -9,6 +9,7 @@ use App\Models\PrintOrder;
 use App\Models\Views\PrintOrderView;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Support\Facades\DB;
 
 class PrintOrderController extends Controller
 {
@@ -55,7 +56,7 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'installments', 'process'));
+        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'installments.transactionReceipt', 'process'));
     }
 
     /**
@@ -88,99 +89,95 @@ class PrintOrderController extends Controller
 
         ]);
 
+        $printOrder = DB::transaction(function () use ($printOrder, $validator, $request) {
+            $design_type = $printOrder->design_type;
+            $data = $validator->validated() + [
+                'updated_by' => auth()->user()->id,
+            ];
 
-        $design_type = $printOrder->design_type;
-        $data = $validator->validated() + [
-            'updated_by' => auth()->user()->id,
+            if ($request->input('final') == true) {
+                $data['status'] = PrintOrderStatus::UNDERGRADUATE;
+                $data['user_access'] = false;
+            }
 
-        ];
-        // dd($request->input('final'))
-        if ($request->input('final') == true) {
-            $data['status'] = PrintOrderStatus::UNDERGRADUATE;
-            $data['user_access'] = false;
+            $printOrder->update($data);
 
-        }
+            $assessment = $printOrder->assessment()->updateOrCreate([
+                'print_order_id' => $printOrder->id,
+            ], $request->input('assessment', []));
 
-        $printOrder->update($data);
+            if ($assessment->operator_approval_date && $assessment->warehouse_approval_date && $assessment->financial_approval_date) {
+                $printOrder->update([
+                    'status' => PrintOrderStatus::USER_CONFIRMATION
+                ]);
+            }
 
 
 
-        $assessment = $printOrder->assessment()->updateOrCreate([
-            'print_order_id' => $printOrder->id,
-        ], $request->input('assessment', []));
+            $printOrder->installments()->sync(
+                array_map(
+                    function ($item) use ($printOrder) {
+                        return [
+                            'id' => $item['id'] ?? null,
+                            'amount' => $item['amount'],
+                            'is_paid' => $item['is_paid'] ?? 0,
+                            'user_id' => $printOrder->user_id,
+                        ];
+                    },
+                    $request->input('installments', [])
+                )
+            );
 
-        if ($assessment->operator_approval_date && $assessment->warehouse_approval_date && $assessment->financial_approval_date) {
-            $printOrder->update([
-                'status' => PrintOrderStatus::USER_CONFIRMATION
-            ]);
-        }
+            if ($request->assessment['prepayment_amount'] ?? null)
+                $printOrder->installments()->updateOrCreate([
+                    'type' => 'prepayment'
+                ], [
+                    'amount' => $request->assessment['prepayment_amount'],
+                    'user_id' => $printOrder->user_id,
+                ]);
 
-        $printOrder->installments()->sync(
-            array_map(
-                function ($item) use ($printOrder) {
+
+            $printOrder->process()->updateOrCreate([
+                'print_order_assessment_id' => $printOrder->assessment->id,
+                'print_order_id' => $printOrder->id,
+            ], $request->input('process', []));
+
+            if ($design_type == 'pattern')
+                $printOrder->roll()->updateOrCreate([
+                    'print_order_id' => $printOrder->id
+                ], $validator->validated());
+
+            if ($design_type == 'single') {
+                $printOrder->patterns()->sync(array_map(function ($item) {
                     return [
-                        'id' => $item['id'] ?? null,
-                        'amount' => $item['amount'],
-                        'is_paid' => $item['is_paid'] ?? 0,
-                        'user_id' => $printOrder->user_id,
+                        'width' => $item['width'],
+                        'height' => $item['height'],
+                        'count' => $item['count'],
+                        'id' => $item['id'],
+                        'name' => $item['name']
 
                     ];
-                },
-                $request->input('installments', [])
-            )
-        );
-        // foreach ($request->input('installments', []) as $installment) {
-        //     $printOrder->installments()->updateOrCreate([
-        //         'id' => $installment['id'] ?? null
-        //     ], [
-        //         'user_id' => $printOrder->user_id,
-        //         'amount' => $installment['amount'],
-        //         'is_paid' => $installment['is_paid'],
-
-        //     ]);
-        // }
-
-        $printOrder->process()->updateOrCreate([
-            'print_order_assessment_id' => $printOrder->assessment->id,
-            'print_order_id' => $printOrder->id,
-        ], $request->input('process', []));
-
-        if ($design_type == 'pattern')
-            $printOrder->roll()->updateOrCreate([
-                'print_order_id' => $printOrder->id
-            ], $validator->validated());
-
-        if ($design_type == 'single') {
-            $printOrder->patterns()->sync(array_map(function ($item) {
+                }, $request->input('patterns', [])));
+            }
+            $printOrder->orderFiles()->sync(array_map(function ($item) use ($printOrder) {
                 return [
-                    'width' => $item['width'],
-                    'height' => $item['height'],
-                    'count' => $item['count'],
+                    'design_width' => $item['design_width'] ?? null,
+                    'design_height' => $item['design_height'] ?? null,
+                    'design_resize_scale' => $item['design_resize_scale'] ?? null,
+                    'design_direction' => $item['design_direction'] ?? null,
+                    'pattern_id' => isset($item['pattern_index']) ? $printOrder->patterns->toArray()[$item['pattern_index']]['id'] ?? null : null,
+                    'count' => $item['count'] ?? null,
+                    'print_size' => $item['print_size'] ?? null,
                     'id' => $item['id'],
-                    'name' => $item['name']
-
+                    'design_file_id' => $item['file_id']
                 ];
-            }, $request->input('patterns',[])));
-        }
+            }, $request->input('designs', [])));
 
-        // dd($printOrder->patterns->toArray()['0']);
+            return $printOrder;
 
-        $printOrder->orderFiles()->sync(array_map(function ($item) use ($printOrder) {
-            return [
-                'design_width' => $item['design_width'] ?? null,
-                'design_height' => $item['design_height'] ?? null,
-                'design_resize_scale' => $item['design_resize_scale'] ?? null,
-                'design_direction' => $item['design_direction'] ?? null,
-                'pattern_id' => isset($item['pattern_index']) ? $printOrder->patterns->toArray()[$item['pattern_index']]['id'] ?? null : null,
-                'count' => $item['count'] ?? null,
-                'print_size' => $item['print_size'] ?? null,
-                'id' => $item['id'],
-                'design_file_id' => $item['file_id']
-            ];
-        }, $request->input('designs', [])));
+        });
 
-
-        return $this->updatedResponse($printOrder->refresh()->load('patterns', 'installments', 'orderFiles.file'));
+        return $this->updatedResponse($printOrder->refresh()->load('patterns', 'installments.transactionReceipt', 'orderFiles.file'));
     }
 
     /**

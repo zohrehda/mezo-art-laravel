@@ -8,6 +8,9 @@ enum PrintOrderStatus: string
     case UNDERGRADUATE = 'undergraduate';
 
     case USER_CONFIRMATION = 'user_confirmation';
+
+    case ADMIN_CONFIRMATION = 'admin_confirmation';
+
     case PREPARATION = 'preparation';
     case PRINTING = 'printing';
     case DONE = 'done';
