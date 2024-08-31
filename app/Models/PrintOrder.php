@@ -58,7 +58,19 @@ class PrintOrder extends Model
 
     public function installments()
     {
-        return $this->hasManySyncable(Installment::class);
+        return $this->hasManySyncable(Installment::class, 'print_order_id');
+    }
+
+    public function transactionReceipts()
+    {
+        return $this->hasManyThrough(TransactionReceipt::class, Installment::class);
+    }
+
+    public function currentInstallment()
+    {
+        return $this->installments()->orderBy('created_at')
+            ->WhereDoesntHave('transactionReceipt')
+            ->where('is_paid', 0)->first();
     }
 
     public function patterns()
@@ -68,12 +80,12 @@ class PrintOrder extends Model
 
     public function assessment()
     {
-        return $this->hasOne(PrintOrderAssessment::class,'print_order_id');
+        return $this->hasOne(PrintOrderAssessment::class, 'print_order_id');
     }
 
     public function process()
     {
-        return $this->hasOne(PrintOrderProcess::class,'print_order_id');
+        return $this->hasOne(PrintOrderProcess::class, 'print_order_id');
     }
 
 
@@ -93,12 +105,10 @@ class PrintOrder extends Model
             'design_type_fa' => trans("messages.design_type." . $this->design_type),
             'user_can_edit' => $this->status == PrintOrderStatus::IN_PROGRESS || $this->user_access,
             'admin_can_edit' => $this->admin_access,
-            'user_can_complete' =>
-                ($this->assessment->operator_approval_date ?? false) and
+            'user_can_complete' => ($this->assessment->operator_approval_date ?? false) and
                 ($this->assessment->warehouse_approval_date ?? false) and
-                ($this->assessment->financial_approval_date ?? false)
-            ,
-
+                ($this->assessment->financial_approval_date ?? false),
+            'current_installment' => $this->currentInstallment()
 
             // 'user_can_complete' => $this->assessment->operator_approval_date ?? false and
             //     $this->assessment->$this->assessment->warehouse_approval_date ?? false and

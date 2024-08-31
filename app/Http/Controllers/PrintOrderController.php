@@ -42,11 +42,11 @@ class PrintOrderController extends Controller
 
         $printOrder = PrintOrder::create(
             $validator->safe()->except(['user_id']) +
-            [
-                'user_id' => $request->input('user_id') ?: auth()->user()->id,
-                'code' => rand(100000, 999999),
-                'created_by' => auth()->user()->id
-            ]
+                [
+                    'user_id' => $request->input('user_id') ?: auth()->user()->id,
+                    'code' => rand(100000, 999999),
+                    'created_by' => auth()->user()->id
+                ]
         );
         return $this->createdResponse($printOrder);
     }
@@ -56,7 +56,9 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'installments.transactionReceipt', 'process'));
+        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'installments.transactionReceipt'
+        ,'transactionReceipts'
+        , 'process'));
     }
 
     /**
@@ -142,6 +144,11 @@ class PrintOrderController extends Controller
                 'print_order_id' => $printOrder->id,
             ], $request->input('process', []));
 
+            if ($request->process['printing_house_reference_date'] ?? null)
+                $printOrder->update([
+                    'status' => PrintOrderStatus::PRINTING
+                ]);
+
             if ($design_type == 'pattern')
                 $printOrder->roll()->updateOrCreate([
                     'print_order_id' => $printOrder->id
@@ -174,7 +181,6 @@ class PrintOrderController extends Controller
             }, $request->input('designs', [])));
 
             return $printOrder;
-
         });
 
         return $this->updatedResponse($printOrder->refresh()->load('patterns', 'installments.transactionReceipt', 'orderFiles.file'));
@@ -196,7 +202,6 @@ class PrintOrderController extends Controller
 
         return Pdf::view('reports.print_order')
             ->format('a4')
-            ->name('your-invoice.pdf');
-        ;
+            ->name('your-invoice.pdf');;
     }
 }

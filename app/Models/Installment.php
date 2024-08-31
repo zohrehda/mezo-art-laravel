@@ -14,14 +14,12 @@ class Installment extends Model
         'amount',
         'is_paid',
         'type',
-        'transaction_num',
-        'payment_date',
-
+        'payment_method',
     ];
 
     public function printOrder()
     {
-        return $this->belongsTo(PrintOrder::class);
+        return $this->belongsTo(PrintOrder::class,'print_order_id');
     }
 
     public function transactionReceipt()

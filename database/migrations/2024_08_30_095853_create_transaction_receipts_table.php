@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('transaction_receipts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('installment_id')->constrained('installments');
+            $table->foreignId('installment_id')->constrained('installments')->nullable();
             $table->unsignedBigInteger('amount')->nullable();
             $table->unsignedBigInteger('transaction_num')->nullable();
             $table->dateTime('payment_date')->nullable();

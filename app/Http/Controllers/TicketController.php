@@ -14,7 +14,6 @@ class TicketController extends Controller
     public function index()
     {
         return Ticket::filter()->paginate22();
-
     }
 
     /**
@@ -41,7 +40,6 @@ class TicketController extends Controller
         });
 
         return $this->retrieve($ticket);
-
     }
 
     /**
@@ -49,7 +47,6 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-
         return $this->retrieve($ticket->loady());
     }
 

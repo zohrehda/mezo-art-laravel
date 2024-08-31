@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PrintOrderStatus;
+use App\Models\Installment;
 use App\Models\TransactionReceipt;
 use Illuminate\Http\Request;
 
@@ -26,8 +28,14 @@ class TransactionReceiptController extends Controller
             'transaction_num' => 'required',
             'payment_date' => '',
         ]);
+        //admin_confirmation
+        Installment::find($request->installment_id)->printOrder()
+            ->update([
+                'status' => PrintOrderStatus::ADMIN_CONFIRMATION
+            ]);
+
         $transactionReceipt = TransactionReceipt::create($validator->validated());
-        
+
         return $this->retrieve($transactionReceipt);
     }
 
@@ -44,7 +52,18 @@ class TransactionReceiptController extends Controller
      */
     public function update(Request $request, TransactionReceipt $transactionReceipt)
     {
-        //
+        $validator = $request->apiValidate([
+            'is_paid' => 'boolean',
+            'transaction_num' => 'sometimes'
+        ]);
+
+        $transactionReceipt->update($validator->validated());
+        
+        $transactionReceipt->installment()->update([
+            'is_paid' => $request->input('is_paid')
+        ]);
+
+        return $this->updatedResponse($transactionReceipt);
     }
 
     /**
