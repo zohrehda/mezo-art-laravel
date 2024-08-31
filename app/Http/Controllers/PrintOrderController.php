@@ -57,7 +57,7 @@ class PrintOrderController extends Controller
     public function show(PrintOrder $printOrder)
     {
         return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'installments.transactionReceipt'
-        ,'transactionReceipts'
+        ,'transactionReceipts.installment'
         , 'process'));
     }
 

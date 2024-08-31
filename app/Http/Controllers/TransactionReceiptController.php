@@ -63,7 +63,7 @@ class TransactionReceiptController extends Controller
             'is_paid' => $request->input('is_paid')
         ]);
 
-        return $this->updatedResponse($transactionReceipt);
+        return $this->updatedResponse($transactionReceipt->load('installment'));
     }
 
     /**
