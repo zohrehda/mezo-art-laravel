@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\DesignFile;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 class Design extends Model
 {
     use HasFactory, Filterable, Taggable, Fileable;
+    use HasJsonRelationships;
 
     protected $fillable = [
         'code',
@@ -27,7 +28,7 @@ class Design extends Model
         'designer_id',
         'package',
         'category_id',
-        'colors',
+        'color_ids',
         'pinterest_link',
         'colored_fabric',
     ];
@@ -35,13 +36,17 @@ class Design extends Model
     protected $appends = ['tag_ids'];
     protected $attributes = ['downloadable' => 1, 'code' => 33];
     protected $casts = [
-        'colors' => 'array',
+        'color_ids' => 'array',
         'colored_fabric' => 'boolean'
     ];
 
     public function siteFiles()
     {
         return $this->files()->where('fileables.section', 'site');
+    }
+
+    public function colors(){
+        return $this->belongsToJson(Palette::class,'color_ids') ;
     }
 
     public function printFiles()

@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->foreignId('designer_id');
             $table->string('package')->nullable();
             $table->foreignId('category_id')->nullable();
-            $table->json('colors')->nullable();
+            $table->json('color_ids')->nullable();
             $table->boolean('colored_fabric')->default(0);
             //   $table->json('fabric_colors')->nullable();
             $table->string('pinterest_link')->nullable();

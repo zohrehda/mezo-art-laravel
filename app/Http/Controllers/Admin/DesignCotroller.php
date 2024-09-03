@@ -31,8 +31,8 @@ class DesignCotroller extends Controller
             'designer_id' => 'required|exists:users,id',
             'package' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'colors' => 'array',
-            'colors.*' => 'exists:palette,id',
+            'color_ids' => 'array',
+            'color_ids.*' => 'exists:palette,id',
             'pinterest_link' => 'nullable',
         ]);
         $design = DB::transaction(function () use ($validator) {
@@ -66,7 +66,7 @@ class DesignCotroller extends Controller
             'designer_id' => 'sometimes|exists:users,id',
             'package' => 'sometimes',
             'category_id' => 'nullable|exists:categories,id',
-            'colors' => 'array',
+            'color_ids' => 'array',
             'pinterest_link' => 'nullable',
             'tag_ids' => 'array|sometimes',
             'tag_ids.*' => 'exists:tags,id',
