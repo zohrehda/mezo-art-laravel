@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('print_order_id')->constrained('print_orders')->onDelete('cascade');
             $table->foreignId('print_order_assessment_id')->constrained('print_order_assessments')->onDelete('cascade');
+            $table->dateTime('confirmation_date')->nullable();
+            $table->dateTime('preparation_date')->nullable(); 
             $table->dateTime('printing_house_reference_date')->nullable();
             $table->dateTime('fabric_placement_date')->nullable();
             $table->dateTime('observer_presence_date')->nullable();

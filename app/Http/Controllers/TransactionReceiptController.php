@@ -36,7 +36,7 @@ class TransactionReceiptController extends Controller
 
         $transactionReceipt = TransactionReceipt::create($validator->validated());
 
-        return $this->retrieve($transactionReceipt);
+        return $this->retrieve($transactionReceipt->load('installment'));
     }
 
     /**

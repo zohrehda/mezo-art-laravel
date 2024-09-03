@@ -14,9 +14,12 @@ class Installment extends Model
         'amount',
         'is_paid',
         'type',
+        'title',
         'payment_method',
     ];
-
+    protected $casts=[
+        'is_paid'=>'boolean'
+    ];
     public function printOrder()
     {
         return $this->belongsTo(PrintOrder::class,'print_order_id');

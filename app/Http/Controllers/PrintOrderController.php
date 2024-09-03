@@ -56,9 +56,15 @@ class PrintOrderController extends Controller
      */
     public function show(PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load('roll', 'patterns', 'orderFiles.file', 'assessment', 'installments.transactionReceipt'
-        ,'transactionReceipts.installment'
-        , 'process'));
+        return $this->retrieve($printOrder->load(
+            'roll',
+            'patterns',
+            'orderFiles.file',
+            'assessment',
+            'installments.transactionReceipt',
+            'transactionReceipts.installment',
+            'process'
+        ));
     }
 
     /**
@@ -88,6 +94,7 @@ class PrintOrderController extends Controller
             'installments' => 'array',
             'installments.*.amount' => 'integer',
             'installments.*.is_paid' => 'boolean',
+         //   'installments.*.title' => 'string',
 
         ]);
 
@@ -108,27 +115,25 @@ class PrintOrderController extends Controller
                 'print_order_id' => $printOrder->id,
             ], $request->input('assessment', []));
 
-            if ($assessment->operator_approval_date && $assessment->warehouse_approval_date && $assessment->financial_approval_date) {
-                $printOrder->update([
-                    'status' => PrintOrderStatus::USER_CONFIRMATION
-                ]);
-            }
 
-
-
-            $printOrder->installments()->sync(
+          //  dd($request->input('installments', []));
+            $printOrder->installments()->where('type',null)->sync(
                 array_map(
                     function ($item) use ($printOrder) {
                         return [
                             'id' => $item['id'] ?? null,
                             'amount' => $item['amount'],
+                            'payment_method' => $item['payment_method'] ?? null,
                             'is_paid' => $item['is_paid'] ?? 0,
+                            'title' => $item['title'] ?? null,
                             'user_id' => $printOrder->user_id,
+
                         ];
                     },
                     $request->input('installments', [])
                 )
             );
+          //  dd('fff');
 
             if ($request->assessment['prepayment_amount'] ?? null)
                 $printOrder->installments()->updateOrCreate([
@@ -136,6 +141,9 @@ class PrintOrderController extends Controller
                 ], [
                     'amount' => $request->assessment['prepayment_amount'],
                     'user_id' => $printOrder->user_id,
+                    'title'=>'پیش پرداخت',
+                    'payment_method' => $request->assessment['payment_method'] ?? null,
+
                 ]);
 
 
@@ -144,9 +152,20 @@ class PrintOrderController extends Controller
                 'print_order_id' => $printOrder->id,
             ], $request->input('process', []));
 
+            if ($request->process['confirmation_date'] ?? null)
+                $status = PrintOrderStatus::USER_CONFIRMATION;
+            if ($request->process['preparation_date'] ?? null)
+                $status = PrintOrderStatus::PREPARATION;
             if ($request->process['printing_house_reference_date'] ?? null)
+                $status = PrintOrderStatus::PRINTING;
+
+            if (
+                ($request->process['confirmation_date'] ?? null) ||
+                ($request->process['preparation_date'] ?? null) ||
+                ($request->process['printing_house_reference_date'] ?? null)
+            )
                 $printOrder->update([
-                    'status' => PrintOrderStatus::PRINTING
+                    'status' => $status
                 ]);
 
             if ($design_type == 'pattern')

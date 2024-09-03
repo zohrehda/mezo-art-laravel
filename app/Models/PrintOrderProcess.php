@@ -11,6 +11,8 @@ class PrintOrderProcess extends Model
     protected $fillable = [
         'print_order_id',
         'print_order_assessment_id',
+        'confirmation_date',
+        'preparation_date',
         'printing_house_reference_date',
         'fabric_placement_date',
         'observer_presence_date',
@@ -19,6 +21,8 @@ class PrintOrderProcess extends Model
     ];
 
     protected $casts=[
+        'confirmation_date'=>'datetime' ,
+        'preparation_date'=>'datetime' ,
         'printing_house_reference_date'=>'datetime' ,
         'fabric_placement_date'=>'datetime' ,
         'observer_presence_date'=>'datetime' ,

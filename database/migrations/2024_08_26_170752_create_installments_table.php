@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('amount');
             $table->boolean('is_paid')->default(0);
             $table->string('type')->nullable();
+            $table->string('title')->nullable();
             $table->string('payment_method')->nullable();
             $table->timestamps();
         });
