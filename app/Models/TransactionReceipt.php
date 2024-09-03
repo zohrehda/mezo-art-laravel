@@ -15,6 +15,10 @@ class TransactionReceipt extends Model
         'payment_date'
     ];
 
+    protected $casts=[
+        'payment_date'=>'datetime' ,
+    ] ;
+
     public function installment()
     {
         return $this->belongsTo(Installment::class, 'installment_id');
