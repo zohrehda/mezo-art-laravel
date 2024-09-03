@@ -94,7 +94,7 @@ class PrintOrderController extends Controller
             'installments' => 'array',
             'installments.*.amount' => 'integer',
             'installments.*.is_paid' => 'boolean',
-         //   'installments.*.title' => 'string',
+            //   'installments.*.title' => 'string',
 
         ]);
 
@@ -116,8 +116,8 @@ class PrintOrderController extends Controller
             ], $request->input('assessment', []));
 
 
-          //  dd($request->input('installments', []));
-            $printOrder->installments()->where('type',null)->sync(
+            //  dd($request->input('installments', []));
+            $printOrder->installments()->where('type', null)->sync(
                 array_map(
                     function ($item) use ($printOrder) {
                         return [
@@ -133,7 +133,7 @@ class PrintOrderController extends Controller
                     $request->input('installments', [])
                 )
             );
-          //  dd('fff');
+            //  dd('fff');
 
             if ($request->assessment['prepayment_amount'] ?? null)
                 $printOrder->installments()->updateOrCreate([
@@ -141,7 +141,7 @@ class PrintOrderController extends Controller
                 ], [
                     'amount' => $request->assessment['prepayment_amount'],
                     'user_id' => $printOrder->user_id,
-                    'title'=>'پیش پرداخت',
+                    'title' => 'پیش پرداخت',
                     'payment_method' => $request->assessment['payment_method'] ?? null,
 
                 ]);
@@ -158,10 +158,13 @@ class PrintOrderController extends Controller
                 $status = PrintOrderStatus::PREPARATION;
             if ($request->process['printing_house_reference_date'] ?? null)
                 $status = PrintOrderStatus::PRINTING;
+            if ($request->process['completion_date'] ?? null)
+                $status = PrintOrderStatus::COMPLETION;
 
             if (
                 ($request->process['confirmation_date'] ?? null) ||
                 ($request->process['preparation_date'] ?? null) ||
+                ($request->process['completion_date'] ?? null) ||
                 ($request->process['printing_house_reference_date'] ?? null)
             )
                 $printOrder->update([

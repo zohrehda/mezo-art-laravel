@@ -17,6 +17,7 @@ class PrintOrderProcess extends Model
         'fabric_placement_date',
         'observer_presence_date',
         'deliveryـtime_date',
+        'completion_date' ,
         'estimatedـdeliveryـtime_date'
     ];
 
@@ -28,5 +29,6 @@ class PrintOrderProcess extends Model
         'observer_presence_date'=>'datetime' ,
         'deliveryـtime_date'=>'datetime' ,
         'estimatedـdeliveryـtime_date'=>'datetime' ,
+        'completion_date'=>'datetime' ,
     ] ;
 }

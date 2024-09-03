@@ -29,10 +29,12 @@ class TransactionReceiptController extends Controller
             'payment_date' => '',
         ]);
         //admin_confirmation
-        Installment::find($request->installment_id)->printOrder()
-            ->update([
-                'status' => PrintOrderStatus::ADMIN_CONFIRMATION
-            ]);
+        $installment =  Installment::find($request->installment_id);
+        if ($installment->type == 'prepayment')
+            $installment->printOrder()
+                ->update([
+                    'status' => PrintOrderStatus::ADMIN_CONFIRMATION
+                ]);
 
         $transactionReceipt = TransactionReceipt::create($validator->validated());
 
@@ -58,7 +60,7 @@ class TransactionReceiptController extends Controller
         ]);
 
         $transactionReceipt->update($validator->validated());
-        
+
         $transactionReceipt->installment()->update([
             'is_paid' => $request->input('is_paid')
         ]);

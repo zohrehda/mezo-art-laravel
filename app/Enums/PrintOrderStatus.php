@@ -16,9 +16,15 @@ enum PrintOrderStatus: string
 
     case PRINTING = 'printing';
 
+   // case SETTLEMENT="settlement" ;
+
+    case COMPLETION="completion" ;
+
     case READY = 'ready';
 
-    case DONE = 'done';
+    case DELIVERED='delivered' ;
+
+ 
 
 
     // case PAYMENT_AWAITING = 'payment_awaiting';
