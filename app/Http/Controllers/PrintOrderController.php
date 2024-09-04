@@ -54,9 +54,11 @@ class PrintOrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PrintOrder $printOrder)
+    public function show(Request $request,PrintOrder $printOrder)
     {
-        return $this->retrieve($printOrder->load(
+        if($request->has('view'))
+          return $this->retrieve(PrintOrderView::find($printOrder->id)) ;
+        return $this->retrieve($printOrder->loady()->load(
             'roll',
             'patterns',
             'orderFiles.file',
@@ -66,6 +68,7 @@ class PrintOrderController extends Controller
             'process'
         ));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -160,11 +163,16 @@ class PrintOrderController extends Controller
                 $status = PrintOrderStatus::PRINTING;
             if ($request->process['completion_date'] ?? null)
                 $status = PrintOrderStatus::COMPLETION;
+            if ($request->process['estimatedـdeliveryـtime_date'] ?? null)
+                $status = PrintOrderStatus::READY;
+             if ($request->process['deliveryـtime_date'] ?? null)
+                $status = PrintOrderStatus::DELIVERED;
 
             if (
                 ($request->process['confirmation_date'] ?? null) ||
                 ($request->process['preparation_date'] ?? null) ||
                 ($request->process['completion_date'] ?? null) ||
+                ($request->process['deliveryـtime_date'] ?? null) ||
                 ($request->process['printing_house_reference_date'] ?? null)
             )
                 $printOrder->update([
