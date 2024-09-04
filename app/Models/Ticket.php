@@ -15,7 +15,7 @@ class Ticket extends Model
 
     protected $fillable = [
         'subject',
-        'uuid',
+        'code',
         'title',
         'priority',
         'ref',
@@ -37,7 +37,6 @@ class Ticket extends Model
                 return $builder;
             else
                 $builder->where('user_id', auth()->user()->id);
-
         });
     }
 
@@ -48,5 +47,16 @@ class Ticket extends Model
     public function messages()
     {
         return $this->hasMany(TicketMessage::class);
+    }
+
+    public function jsonSerialize(): mixed
+    {
+
+        return [
+
+            ...$this->toArray(),
+            'message_status' => ($this->status != 'open') ?$this->status: ($this->messages()->latest()->first()->user_id == auth()->user()->id ? "pending" : 'answered')
+
+        ];
     }
 }

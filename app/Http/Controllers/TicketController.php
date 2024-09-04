@@ -13,7 +13,10 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return Ticket::filter()->paginate22();
+        if (auth()->user()->isAdmin())
+            return Ticket::filter()->paginate22();
+        else
+            return Ticket::filter()->where('user_id', auth()->user()->id)->paginate22();
     }
 
     /**
@@ -26,15 +29,20 @@ class TicketController extends Controller
             'title' => 'required',
             'priority' => 'required',
             'ref' => 'required',
-            'message' => 'required'
+            'message' => 'required',
+
         ]);
         $ticket = DB::transaction(function () use ($validator, $request) {
 
-            $ticket = Ticket::create($validator->validated() + ['user_id' => auth()->user()->id]);
+            $ticket = Ticket::create($validator->validated() + [
+                'user_id' => auth()->user()->id,
+                'code' => rand(100000, 999999)
+            ]);
             $ticket->messages()->create([
                 'user_id' => auth()->user()->id,
                 'message' => $request->message,
                 'ticket_id' => $ticket->id,
+
             ]);
             return $ticket;
         });
@@ -55,7 +63,12 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        //
+        $validator = $request->apiValidate([
+            'status' => 'sometimes|in:closed'
+        ]);
+
+        $ticket->update($validator->validated());
+        return $this->updatedResponse($ticket->refresh());
     }
 
     /**

@@ -65,8 +65,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function getMorphClass(){
-        return self::class ;
+    public function getMorphClass()
+    {
+        return self::class;
     }
 
     public function meta()
@@ -111,6 +112,9 @@ class User extends Authenticatable
         return $this->belongsTo(PrintOrder::class, 'user_id');
     }
 
+    public function isAdmin() {
+        return $this->role=='admin' ;
+    }
 
 
     // protected $appends = ['fullName'];
@@ -121,4 +125,3 @@ class User extends Authenticatable
     //     );
     // }
 }
-
