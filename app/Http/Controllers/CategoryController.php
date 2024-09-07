@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         $validator = $request->apiValidate([
             'name' => 'required',
-            'type' => 'nullable|in:blog,design',
+            'type' => 'nullable|in:blog,design,faq',
             'parent_id' => 'nullable|exists:categories,id',
             'color' => 'sometimes'
         ]);
@@ -47,7 +47,7 @@ class CategoryController extends Controller
     {
         $validator = $request->apiValidate([
             'name' => 'sometimes',
-            'type' => 'nullable|in:blog,design',
+            'type' => 'nullable|in:blog,design,faq',
             'parent_id' => 'nullable|exists:categories,id',
             'color' => 'sometimes'
         ]);

@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FabricMaterialController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\PaletteController;
 use App\Http\Controllers\PrintCartController;
@@ -98,3 +99,5 @@ Route::prefix('me')->middleware('auth:sanctum')->group(function () {
     Route::get('print_orders', [PrintOrderController::class, 'me']);
 
 });
+
+Route::apiResource('faqs', FaqController::class);
