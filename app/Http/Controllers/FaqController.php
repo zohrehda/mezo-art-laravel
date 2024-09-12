@@ -23,7 +23,7 @@ class FaqController extends Controller
         $validator=$request->apiValidate([
             'question'=>'required',
             'answer'=>'required',
-            'content'=>'required',
+            'content'=>'nullable',
             'category_id'=>'exists:categories,id'
            // 'category_ids'=>'array',
             //'category_ids.*'=>'in:categories,id',

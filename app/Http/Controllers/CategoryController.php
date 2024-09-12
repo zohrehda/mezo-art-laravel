@@ -29,6 +29,11 @@ class CategoryController extends Controller
             'color' => 'sometimes'
         ]);
         $category = Category::create($validator->validated());
+        if ($request->has('image')) {
+            $category->image()->sync($request->input('image') ? [
+                $request->input('image')['id']
+            ] : []);
+        }
         return $this->createdResponse($category);
     }
 

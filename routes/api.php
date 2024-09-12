@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FabricMaterialController;
+use App\Http\Controllers\FaqCategoryController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PageBuilderController;
 use App\Http\Controllers\PaletteController;
@@ -94,10 +95,10 @@ Route::apiResource('fabric_materials', FabricMaterialController::class);
 Route::apiResource('transaction_receipts', TransactionReceiptController::class)->middleware('auth:sanctum');
 
 Route::prefix('me')->middleware('auth:sanctum')->group(function () {
-
     Route::get('accessory_suppliers', [AccessorySupplierController::class, 'me']);
     Route::get('print_orders', [PrintOrderController::class, 'me']);
-
 });
 
 Route::apiResource('faqs', FaqController::class);
+
+Route::get('faq_categories/{category}', [FaqCategoryController::class, 'show']);
