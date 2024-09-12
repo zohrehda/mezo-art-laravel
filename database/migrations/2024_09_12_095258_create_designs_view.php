@@ -19,8 +19,8 @@ return new class extends Migration {
         designs.code , '/', GROUP_CONCAT(tags.name separator '-' )
          ) as slug
           FROM designs
-        LEFT JOIN categories ON  designs.category_id=categories.id 
-        LEFT JOIN taggables  ON  designs.id = taggables.taggable_id 
+        LEFT JOIN categories ON  designs.category_id=categories.id   
+        LEFT JOIN taggables  ON  designs.id = taggables.taggable_id and taggables.taggable_type='App\\\Models\\\Design'
         LEFT JOIN tags  ON  tags.id = taggables.tag_id 
 
         GROUP BY designs.id
