@@ -102,3 +102,4 @@ Route::prefix('me')->middleware('auth:sanctum')->group(function () {
 Route::apiResource('faqs', FaqController::class);
 
 Route::get('faq_categories/{category}', [FaqCategoryController::class, 'show']);
+Route::get('files', [FileController::class, 'index']);

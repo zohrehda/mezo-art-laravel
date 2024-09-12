@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Design;
+use App\Models\Views\DesignView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,9 +14,7 @@ class DesignCotroller extends Controller
      */
     public function index()
     {
-        // dd(request()->all());
-        //   return Design::all();
-        return Design::filter()->paginate22();
+        return DesignView::filter()->paginate22();
     }
 
     /**
@@ -33,6 +32,8 @@ class DesignCotroller extends Controller
             'colored_fabric' => 'required|boolean',
             'designer_id' => 'required|exists:users,id',
             'tag_ids' => 'array',
+            'related_ids' => 'array',
+            'related_ids.*' => 'exists:designs,id',
             'package' => 'required',
             'category_id' => 'required|exists:categories,id',
             'color_ids' => 'array',
@@ -53,6 +54,7 @@ class DesignCotroller extends Controller
      */
     public function show(Design $design)
     {
+     
         return $this->retrieve($design->loady());
     }
 
@@ -76,6 +78,8 @@ class DesignCotroller extends Controller
             'pinterest_link' => 'nullable',
             'tag_ids' => 'array|sometimes|exists:tags,id',
             'tag_ids.*' => 'exists:tags,id',
+            'related_ids' => 'array',
+            'related_ids.*' => 'exists:designs,id',
 
         ]);
         $design = DB::transaction(function () use ($validator, $design, $request) {

@@ -29,6 +29,7 @@ class Design extends Model
         'package',
         'category_id',
         'color_ids',
+        'related_ids',
         'pinterest_link',
         'colored_fabric',
     ];
@@ -37,6 +38,7 @@ class Design extends Model
     protected $attributes = ['downloadable' => 1, 'code' => 33];
     protected $casts = [
         'color_ids' => 'array',
+        'related_ids' => 'array',
         'colored_fabric' => 'boolean'
     ];
 
@@ -45,8 +47,13 @@ class Design extends Model
         return $this->files()->where('fileables.section', 'site');
     }
 
-    public function colors(){
-        return $this->belongsToJson(Palette::class,'color_ids') ;
+    public function colors()
+    {
+        return $this->belongsToJson(Palette::class, 'color_ids');
+    }    
+    public function related()
+    {
+        return $this->belongsToJson(self::class, 'related_ids');
     }
 
     public function printFiles()
@@ -95,6 +102,8 @@ class Design extends Model
         );
     }
 
+  
+
 
 
     // protected function colors(): Attribute
@@ -123,23 +132,23 @@ class Design extends Model
 
     public function scopeModelFilter($query)
     {
-        $request=request() ;
+        $request = request();
         $search = $request->input('search');
 
-        if($request->filled('search')){
-            $query->whereHas('tags',function($query) use($search) {
-             
-                $search_array=   array_filter(explode(' ',$search),function($item){
-                  
-                    return (strlen($item)>2 && $item ) ;
-                    
-                }) ;
+        if ($request->filled('search')) {
+            $query->whereHas('tags', function ($query) use ($search) {
 
-               // dd($search_array) ;
-                $query->where('name','like',"%$search%")->orWhere('name','in',$search_array) ;
-            }) ;
+                $search_array = array_filter(explode(' ', $search), function ($item) {
+
+                    return (strlen($item) > 2 && $item);
+
+                });
+
+                // dd($search_array) ;
+                $query->where('name', 'like', "%$search%")->orWhere('name', 'in', $search_array);
+            });
         }
-        
+
     }
 
 
