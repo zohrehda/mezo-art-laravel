@@ -56,7 +56,7 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
             'color' => 'sometimes'
         ]);
-        $category = $category->update($validator->validated());
+         $category->update($validator->validated());
           if ($request->has('image')) {
             $category->image()->sync($request->input('image') ? [
                 $request->input('image')['id']
