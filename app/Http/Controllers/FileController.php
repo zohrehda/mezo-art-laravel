@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DesignFile;
 use App\Models\File;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -93,7 +94,16 @@ class FileController extends Controller
      */
     public function index()
     {
-        return $this->retrieve(File::all()) ;
+
+        return $this->retrieve(
+            File::all()->mapToGroups(function ($item, $key) {
+                return [
+                    strtolower(substr($item['fileable_type'], 11)) => $item
+                ];
+            })->merge(['print_files' => DesignFile::all()] )->sortKeysDesc()
+
+
+        );
     }
 
     /**
