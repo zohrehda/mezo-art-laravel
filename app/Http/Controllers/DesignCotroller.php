@@ -33,7 +33,7 @@ class DesignCotroller extends Controller
             'private_users' => 'array',
             'colored_fabric' => 'required|boolean',
             'designer_id' => 'required|exists:users,id',
-            'tag_ids' => 'array',
+            'tag_ids' => 'array|min:1',
             'related_ids' => 'array',
             'related_ids.*' => 'exists:designs,id',
             'package' => 'required',
