@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DesignFile extends Model
 {
-    use HasFactory;
+    use HasFactory,Filterable;
     protected $hidden = [
         'fake_file_path',
         'original_file_path'
@@ -36,7 +37,10 @@ class DesignFile extends Model
         return $this->belongsTo(Design::class);
     }
 
-
+    public function designs()
+    {
+        return $this->belongsToMany(Design::class);
+    }
 
     protected function link(): Attribute
     {

@@ -56,7 +56,7 @@ Route::prefix('auth')->group(function () {
 
 Route::get('designs/{design}/download', [DesignCotroller::class, 'downloadFiles']);
 Route::apiResource('/designs', DesignCotroller::class);
-Route::apiResource('/design_files', DesignFileController::class);
+Route::apiResource('/design_files', DesignFileController::class)->middleware('auth:sanctum');
 
 Route::apiResource('/users', UserController::class)->middleware('auth:sanctum');
 Route::apiResource('/categories', CategoryController::class);

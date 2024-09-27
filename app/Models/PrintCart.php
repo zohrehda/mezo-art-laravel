@@ -19,7 +19,7 @@ class PrintCart extends Model
     }
     public function design()
     {
-        return $this->hasOneThrough(Design::class, DesignFile::class, 'id', 'id', 'file_id', 'design_id');
+        return $this->hasOneThrough(Design::class, DesignDesignFile::class, 'design_file_id', 'id', 'file_id', 'design_id');
     }
 
     public function jsonSerialize(): mixed

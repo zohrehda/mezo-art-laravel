@@ -242,7 +242,7 @@ class AuthController extends Controller
         //     'section' => $request->input('section')
         // ]);
 
-        return $this->response(trans('messages.uploaded', ['attribute' => 'عکس پروفایل شما']));
+        return $this->response(trans('messages.uploaded', ['attribute' => 'عکس پروفایل شما'] ),User::find(auth()->user()->id )->image );
     }
 
 

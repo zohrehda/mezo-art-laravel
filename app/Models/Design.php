@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\DesignPrintType;
+use App\Enums\UserRole;
 use App\Models\Traits\Fileable;
 use App\Models\Traits\Filterable;
 use App\Models\Traits\Taggable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\DesignFile;
@@ -42,15 +44,23 @@ class Design extends Model
         'colored_fabric' => 'boolean'
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
     public function siteFiles()
     {
-        return $this->files()->where('fileables.section', 'site');
+        return $this->files()
+
+            ->withPivotValue('section', 'site')
+        ;
     }
 
     public function colors()
     {
         return $this->belongsToJson(Palette::class, 'color_ids');
-    }    
+    }
     public function related()
     {
         return $this->belongsToJson(self::class, 'related_ids');
@@ -58,6 +68,7 @@ class Design extends Model
 
     public function printFiles()
     {
+        return $this->belongsToMany(DesignFile::class, 'design_design_file', 'design_id', 'design_file_id');
         return $this->hasMany(DesignFile::class, 'design_id');
     }
 
@@ -90,6 +101,19 @@ class Design extends Model
         });
     }
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope('access', function (Builder $builder) {
+            $user = request()->user('sanctum');
+
+            if ($user && $user->role == UserRole::ADMIN->value)
+                return $builder;
+            else
+                $builder->where('private', false)->orWhereHas('users',function($query) use($user){
+                 $query->where('users.id',$user->id??null) ;
+                });
+        });
+    }
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
@@ -102,7 +126,7 @@ class Design extends Model
         );
     }
 
-  
+
 
 
 

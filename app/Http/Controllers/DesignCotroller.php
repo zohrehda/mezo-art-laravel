@@ -14,7 +14,9 @@ class DesignCotroller extends Controller
      */
     public function index()
     {
-        return DesignView::filter()->paginate22();
+        return DesignView::filter()
+    
+        ->paginate22();
     }
 
     /**
@@ -39,11 +41,16 @@ class DesignCotroller extends Controller
             'color_ids' => 'array',
             'color_ids.*' => 'exists:palette,id',
             'pinterest_link' => 'nullable',
+            'site_file_ids' => 'array',
+            'print_file_ids' => 'array'
         ]);
         $design = DB::transaction(function () use ($validator) {
             $design = Design::create($validator->validated());
             $design->users()->sync($validator->validated()['private_users'] ?? []);
             $design->tags()->sync($validator->validated()['tag_ids'] ?? []);
+            $design->siteFiles()->sync($validator->validated()['site_file_ids'] ?? []);
+            $design->printFiles()->sync($validator->validated()['print_file_ids'] ?? []);
+
             return $design;
         });
         return $this->createdResponse($design);
@@ -54,7 +61,7 @@ class DesignCotroller extends Controller
      */
     public function show(Design $design)
     {
-     
+
         return $this->retrieve($design->loady());
     }
 
@@ -80,16 +87,25 @@ class DesignCotroller extends Controller
             'tag_ids.*' => 'exists:tags,id',
             'related_ids' => 'array',
             'related_ids.*' => 'exists:designs,id',
+            'site_file_ids' => 'array',
+            'print_file_ids' => 'array'
 
         ]);
         $design = DB::transaction(function () use ($validator, $design, $request) {
             $design->update($validator->validated());
 
-            // if ($request->filled('tag_ids'))
-            //     $design->tags()->sync($request->tag_ids);
+            if ($request->filled('private_users'))
+                $design->users()->sync($validator->validated()['private_users'] ?? []);
 
-            $design->users()->sync($validator->validated()['private_users'] ?? []);
-            $design->tags()->sync($validator->validated()['tag_ids'] ?? []);
+            if ($request->filled('tag_ids'))
+                $design->tags()->sync($validator->validated()['tag_ids'] ?? []);
+
+            if ($request->filled('site_file_ids'))
+                $design->siteFiles()->sync($validator->validated()['site_file_ids'] ?? []);
+
+            if ($request->filled('print_file_ids'))
+                $design->printFiles()->sync($validator->validated()['print_file_ids'] ?? []);
+
 
             return $design;
         });

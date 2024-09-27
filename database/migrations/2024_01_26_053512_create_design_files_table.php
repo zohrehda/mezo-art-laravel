@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('design_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('design_id');
+        //    $table->foreignId('design_id');
             $table->string('code')->nullable();
             $table->string('original_file_path')->nullable();
             $table->string('fake_file_path');

@@ -15,7 +15,9 @@ class DesignFileController extends Controller
      */
     public function index()
     {
-        //
+        return DesignFile::filter()
+            ->orderBy('created_at', 'desc')
+            ->paginate22();
     }
 
     /**
@@ -26,7 +28,7 @@ class DesignFileController extends Controller
         $request->apiValidate([
             'file' => 'required|file',
             'name' => 'required',
-            'design_id' => 'required|exists:designs,id'
+            //     'design_id' => 'required|exists:designs,id'
         ]);
         $file = $request->file('file');
 
@@ -34,9 +36,9 @@ class DesignFileController extends Controller
         $path = $file->storeAs('designs', $name);
 
         $design = Design::find($request->design_id);
- 
+
         $design_file = DesignFile::create([
-            'design_id' => $request->design_id,
+            //  'design_id' => $request->design_id,
             'fake_file_path' => 'app/' . $path,
             // 'code' => Str::random(10),
             // 'code' => rand(100000, 999999),
@@ -78,7 +80,10 @@ class DesignFileController extends Controller
      */
     public function destroy(DesignFile $designFile)
     {
-        $designFile->delete();
+        if ($designFile->designs()->count() > 0)
+            return $this->response('این فایل استفاده شده است ', [], 400);
+        else
+            $designFile->delete();
         return $this->deletedResponse();
     }
 

@@ -25,10 +25,9 @@ class FileController extends Controller
         ]);
         $file = $request->file('file');
 
-
         $name = Str::random(10) . '-' . Carbon::now() . '.' . $file->guessClientExtension();
         //  Storage::put('blogs/' . $name, file_get_contents($file));
-        $path = $file->storeAs('blogs', $name);
+        $path = $file->storeAs(Str::plural($request->fileable_type), $name);
 
         $model = modelResolve($request->fileable_type);
         $file = File::create([
