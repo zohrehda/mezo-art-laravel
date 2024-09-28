@@ -14,6 +14,7 @@ use App\Models\DesignFile;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
+
 class Design extends Model
 {
     use HasFactory, Filterable, Taggable, Fileable;
@@ -109,8 +110,8 @@ class Design extends Model
             if ($user && $user->role == UserRole::ADMIN->value)
                 return $builder;
             else
-                $builder->where('private', false)->orWhereHas('users',function($query) use($user){
-                 $query->where('users.id',$user->id??null) ;
+                $builder->where('private', false)->orWhereHas('users', function ($query) use ($user) {
+                    $query->where('users.id', $user->id ?? null);
                 });
         });
     }
@@ -165,15 +166,21 @@ class Design extends Model
                 $search_array = array_filter(explode(' ', $search), function ($item) {
 
                     return (strlen($item) > 2 && $item);
-
                 });
 
                 // dd($search_array) ;
                 $query->where('name', 'like', "%$search%")->orWhere('name', 'in', $search_array);
             });
         }
+        if ($request->filled('color_ids')) {
+            $query->where(function ($query) use ($request) {
 
+                foreach ($request->input('color_ids') as $k => $color)
+                    $k == 0 ? $query->whereJsonContains('color_ids', (int) $color) : $query->orWhereJsonContains('color_ids', (int) $color);
+
+
+                //->whereJsonContains('color_ids',array_map(function($item){return (int)$item ;},$request->input('color_ids')))
+            });
+        }
     }
-
-
 }
