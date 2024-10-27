@@ -12,9 +12,11 @@ class DesignCotroller extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+      //  dd($request->all());
         return DesignView::filter()
+      //  ->whereJsonContains('color_ids',[9,14])
     
         ->paginate22();
     }
