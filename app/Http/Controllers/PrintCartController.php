@@ -42,7 +42,9 @@ class PrintCartController extends Controller
             ]);
         }
 
-        return $this->response(trans('messages.cart.created'), []);
+        return $this->response(trans('messages.cart.created'), 
+        PrintCart::where('user_id',auth()->user()->id)->get()
+    );
 
         //  $data[]=[ 'file_id'=>$file , 'user_id'=>1 ] ;
 

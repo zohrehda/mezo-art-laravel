@@ -45,7 +45,7 @@ class DesignCotroller extends Controller
             'print_file_ids' => 'array'
         ]);
         $design = DB::transaction(function () use ($validator) {
-            $design = Design::create($validator->validated());
+            $design = Design::create($validator->validated()+['user_id'=>auth()->user()->id ] );
             $design->users()->sync($validator->validated()['private_users'] ?? []);
             $design->tags()->sync($validator->validated()['tag_ids'] ?? []);
             $design->siteFiles()->sync($validator->validated()['site_file_ids'] ?? []);

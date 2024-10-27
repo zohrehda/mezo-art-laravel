@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PrintOrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,9 +12,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        DB::statement('CREATE VIEW print_orders_v AS SELECT 
+        $statuses=implode(',',array: array_map(function($item){
+            return "'$item'" ;
+        },array_column(PrintOrderStatus::cases(), 'value'))) ;
+     //   dd($statuses);
 
+        DB::statement("CREATE VIEW print_orders_v AS SELECT 
+ 
+   
 
+        FIELD(print_orders.status,$statuses) stage_num     ,
          users.first_name as user_first_name,
          users.last_name as user_last_name,
          users.mobile as user_mobile,
@@ -77,7 +85,7 @@ return new class extends Migration {
          GROUP BY print_orders.id,user_metas.id,print_order_assessments.id,print_order_rolls.id;
         
 
-      ');
+      ");
     }
 
     /**

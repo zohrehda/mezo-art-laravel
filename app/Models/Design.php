@@ -34,6 +34,7 @@ class Design extends Model
         'related_ids',
         'pinterest_link',
         'colored_fabric',
+        'user_id'
     ];
 
     protected $appends = ['tag_ids'];

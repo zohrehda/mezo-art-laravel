@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\PrintOrderStatus;
+use App\Enums\UserRole;
 use App\Model\Relations\HasManyRelationship;
 use App\Models\Relations\HasManySyncableRelationship;
 use App\Models\Traits\Filterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -96,6 +98,19 @@ class PrintOrder extends Model
         return $this->hasManySyncable(PrintOrderFile::class, 'print_order_id');
     }
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope('access', function (Builder $builder) {
+            $user = request()->user('sanctum');
+
+            if ($user && $user->role == UserRole::ADMIN->value)
+                return $builder;
+            else
+                $builder->where('user_id', $user->id );
+        });
+    }
+
+
     public function jsonSerialize(): mixed
     {
 
@@ -107,7 +122,7 @@ class PrintOrder extends Model
             'user_can_edit' => $this->status == PrintOrderStatus::IN_PROGRESS || $this->user_access,
             'admin_can_edit' => $this->admin_access,
             'user_can_complete' => $this->status == PrintOrderStatus::USER_CONFIRMATION,
-            'stage_num' => array_search($this->status, array_column(PrintOrderStatus::cases(), 'value')) + 1,
+         //   'stage_num' => array_search($this->status, array_column(PrintOrderStatus::cases(), 'value')) + 1,
             'current_installment' => $this->currentInstallment()
 
             // 'user_can_complete' => $this->assessment->operator_approval_date ?? false and

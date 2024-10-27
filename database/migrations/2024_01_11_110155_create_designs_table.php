@@ -27,6 +27,7 @@ return new class extends Migration {
             $table->boolean('colored_fabric')->default(0);
             //   $table->json('fabric_colors')->nullable();
             $table->string('pinterest_link')->nullable();
+            $table->foreignId('user_id');
             $table->timestamps();
             $table->softDeletes();
         });

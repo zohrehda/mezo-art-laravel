@@ -14,6 +14,7 @@ use App\Http\Controllers\PrintOrderController;
 use App\Http\Controllers\PrintOrderPatternController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\RouteController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketMessageController;
@@ -103,3 +104,4 @@ Route::apiResource('faqs', FaqController::class);
 
 Route::get('faq_categories/{category}', [FaqCategoryController::class, 'show']);
 Route::get('files', [FileController::class, 'index']);
+Route::apiResource('settings',SettingController::class);
