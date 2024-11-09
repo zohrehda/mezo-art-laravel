@@ -21,6 +21,11 @@ class SettingSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
+                'key' => 'dashboard_banner',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
                 'key' => 'blog_profile_sidebar1',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
