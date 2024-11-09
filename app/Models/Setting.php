@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'key',
+        'file_id',
+        'value'
+    ];
+
+    public function file()
+    {
+        return $this->belongsTo(File::class, 'file_id');
+    }
 }

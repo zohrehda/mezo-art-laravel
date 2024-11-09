@@ -8,6 +8,7 @@ use App\Http\Controllers\FabricMaterialController;
 use App\Http\Controllers\FaqCategoryController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PageBuilderController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaletteController;
 use App\Http\Controllers\PrintCartController;
 use App\Http\Controllers\PrintOrderController;
@@ -104,4 +105,6 @@ Route::apiResource('faqs', FaqController::class);
 
 Route::get('faq_categories/{category}', [FaqCategoryController::class, 'show']);
 Route::get('files', [FileController::class, 'index']);
+Route::post('settings/upload/{setting}', [SettingController::class, 'upload']);
 Route::apiResource('settings',SettingController::class);
+Route::apiResource('pages',PageController::class);
