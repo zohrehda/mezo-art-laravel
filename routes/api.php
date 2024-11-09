@@ -78,7 +78,7 @@ Route::get('/subscribe', [SubscriberController::class, 'index'])->middleware('au
 Route::get('/subscribe/{hash}', [SubscriberController::class, 'verify'])->name('subscribe.confirm');
 Route::post('/upload', [FileController::class, 'upload'])->name('files.upload');
 Route::post('/editor_uploader', [FileController::class, 'editorUpload'])->name('files.uploader');
-Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
+Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy')->middleware('auth:sanctum');
 Route::apiResource('/page_builders', PageBuilderController::class)->middleware('auth:sanctum');
 
 Route::put('print_orders/{printOrder}/assessments')->middleware('auth:sanctum');
@@ -88,7 +88,7 @@ Route::get('/print_orders/{printOrder}/report', [PrintOrderController::class, 'r
 Route::apiResource('/print_orders', PrintOrderController::class)->middleware('auth:sanctum');
 Route::apiResource('/print_order_patterns', PrintOrderPatternController::class)->middleware('auth:sanctum');
 
-Route::put('routes/{route}', [RouteController::class, 'update']);
+Route::put('routes/{route}', [RouteController::class, 'update'])->middleware('auth:sanctum');
 Route::get('routes', [RouteController::class, 'index']);
 Route::get('routes/{route}', [RouteController::class, 'show']);
 

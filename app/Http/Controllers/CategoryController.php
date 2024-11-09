@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum', ['only' => ['store', 'update', 'delete']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -56,13 +61,13 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|exists:categories,id',
             'color' => 'sometimes'
         ]);
-         $category->update($validator->validated());
-          if ($request->has('image')) {
+        $category->update($validator->validated());
+        if ($request->has('image')) {
             $category->image()->sync($request->input('image') ? [
                 $request->input('image')['id']
             ] : []);
         }
-        
+
         return $this->updatedResponse($category);
     }
 

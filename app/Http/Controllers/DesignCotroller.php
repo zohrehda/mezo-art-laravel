@@ -9,16 +9,21 @@ use Illuminate\Support\Facades\DB;
 
 class DesignCotroller extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum', ['only' => ['store', 'update','delete']]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-      //  dd($request->all());
+        //  dd($request->all());
         return DesignView::filter()
-      //  ->whereJsonContains('color_ids',[9,14])
-    
-        ->paginate22();
+            //  ->whereJsonContains('color_ids',[9,14])
+
+            ->paginate22();
     }
 
     /**
@@ -47,7 +52,7 @@ class DesignCotroller extends Controller
             'print_file_ids' => 'array'
         ]);
         $design = DB::transaction(function () use ($validator) {
-            $design = Design::create($validator->validated()+['user_id'=>auth()->user()->id ] );
+            $design = Design::create($validator->validated() + ['user_id' => auth()->user()->id]);
             $design->users()->sync($validator->validated()['private_users'] ?? []);
             $design->tags()->sync($validator->validated()['tag_ids'] ?? []);
             $design->siteFiles()->sync($validator->validated()['site_file_ids'] ?? []);

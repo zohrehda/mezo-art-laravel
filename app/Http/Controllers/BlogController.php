@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
+
     /**
      * Instantiate a new controller instance.
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->only(['store', 'update']);
+        $this->middleware('auth:sanctum')->only(['store', 'update','delete']);
     }
 
     /**
