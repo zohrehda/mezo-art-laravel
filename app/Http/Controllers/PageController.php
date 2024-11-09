@@ -17,7 +17,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        return Page::paginate22();
+        return Page::filter()->paginate22();
     }
 
     /**
